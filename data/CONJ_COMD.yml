@@ -1,0 +1,110 @@
+dataset: CONJ_COMD
+datasetname: Enquête mensuelle dans le commerce de détail et l'automobile
+series:
+  bc_comd:
+    idbank: 001580428
+    description: Indicateur synthétique du climat des affaires dans le commerce de
+      détails
+    outliers:
+      ao: 2020.8333333
+      ao_tc: ~
+      ls:
+      - 2020.1666667
+      - 2020.25
+      - 2020.4166667
+      - 2021.3333333
+    first_date: 2012.0
+    length: 13.0
+  compre:
+    idbank: 001580201
+    description: Intentions de commandes pour les 3 prochains mois
+    outliers:
+      ao:
+      - 2020.25
+      - 2020.3333333
+      - 2020.8333333
+      ao_tc: ~
+      ls: ~
+    first_date: 2012.0
+    length: 13.0
+  ossk:
+    idbank: 001580278
+    description: Niveau du stock pour la période de l'année
+    outliers:
+      ao: ~
+      ao_tc: ~
+      ls: ~
+    first_date: 2012.0
+    length: 13.0
+  tcapa:
+    idbank: 001580317
+    description: Évolution des affaires (ventes) au cours des 3 derniers mois
+    outliers:
+      ao: ~
+      ao_tc: ~
+      ls:
+      - 2020.3333333
+      - 2020.5833333
+    first_date: 2012.0
+    length: 13.0
+  tcapre:
+    idbank: 001580355
+    description: Évolution probable des affaires (ventes) au cours des 3 prochains
+      mois
+    outliers:
+      ao:
+      - 2020.25
+      - 2020.3333333
+      - 2020.8333333
+      ao_tc: ~
+      ls: 2021.3333333
+    first_date: 2012.0
+    length: 13.0
+methods:
+  henderson:
+    name: Henderson
+    eval: yes
+  henderson_localic:
+    name: Henderson local I/C
+    eval: yes
+  henderson_robust:
+    name: Henderson (robust)
+    eval: no
+  henderson_robust_localic:
+    name: |-
+      Henderson (robust)
+      local I/C
+    eval: yes
+  clf_cn:
+    name: CLF and cut-and-normalize
+    eval: yes
+  clf_alf:
+    name: CLF and alf
+    eval: no
+plots:
+  nyears: 4.0
+  digits: 2.0
+  bymethods:
+    enabled: yes
+    name: By methods
+  byplots:
+    enabled: yes
+    name: By kind of plots
+  kind:
+    normal: yes
+    confint: yes
+    lollypop: yes
+    implicit_forecasts: yes
+  comparison_plot:
+    enabled: yes
+    interactive: yes
+    name: Comparison of methods
+  revision_history:
+    enabled: yes
+    name: Analysis of revisions
+    table:
+      enabled: yes
+      contribution_of_sa: yes
+  extra_info:
+    enabled: yes
+    name: Extra informations
