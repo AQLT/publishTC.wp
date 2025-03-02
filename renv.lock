@@ -734,7 +734,13 @@
     "publishTC": {
       "Package": "publishTC",
       "Version": "0.1.0",
-      "Source": "unknown",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "AQLT",
+      "RemoteRepo": "publishTC",
+      "RemoteRef": "v0.1.0",
+      "RemoteSha": "e0a42116643a0592e91279b2efd56ca56a164af5",
       "Requirements": [
         "R",
         "ggplot2",
@@ -743,7 +749,7 @@
         "rjd3x13",
         "zoo"
       ],
-      "Hash": "eb3004ce8dc9cd78cd3661a4cfbf9bfd"
+      "Hash": "02ef03bfa0901f428b1e901adaa3c8a5"
     },
     "rJava": {
       "Package": "rJava",
@@ -791,8 +797,14 @@
     },
     "rjd3filters": {
       "Package": "rjd3filters",
-      "Version": "2.1.1.9000",
-      "Source": "unknown",
+      "Version": "2.2.0",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "rjdverse",
+      "RemoteRepo": "rjd3filters",
+      "RemoteRef": "v2.2.0",
+      "RemoteSha": "2a54100a68949fa3690d206af9561e6e971a79b7",
       "Requirements": [
         "MASS",
         "R",
@@ -802,15 +814,18 @@
         "rjd3toolkit",
         "stats"
       ],
-      "Hash": "aba7228da813680b8eb9a8200a2cb6b9"
+      "Hash": "5c4617d8df5cbf2d6dd9c4f1f9454ac0"
     },
     "rjd3toolkit": {
       "Package": "rjd3toolkit",
-      "Version": "3.3.1",
-      "Source": "Repository",
-      "Repository": "https://aqlt.r-universe.dev",
-      "RemoteUrl": "https://github.com/rjdverse/rjd3toolkit",
-      "RemoteSha": "3bc96ad3ef5ab2c38477759505d7839a93deae91",
+      "Version": "3.3.0",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "rjdverse",
+      "RemoteRepo": "rjd3toolkit",
+      "RemoteRef": "v3.3.0",
+      "RemoteSha": "b36073717b91e9bcfa0dec8933aea8bdad07fb55",
       "Requirements": [
         "R",
         "RProtoBuf",
@@ -818,7 +833,7 @@
         "methods",
         "rJava"
       ],
-      "Hash": "1c6c76d06ada7ac3c1071c8cbab27108"
+      "Hash": "87eefa1a4833a0cd3156f1fcc6d3350a"
     },
     "rjd3x13": {
       "Package": "rjd3x13",
