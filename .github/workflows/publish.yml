@@ -1,0 +1,57 @@
+name: Update data and publish report
+
+on:
+#  schedule:
+#    - cron: '0 0 1 * *'  # Exécuter le 1er de chaque mois à minuit
+  workflow_dispatch:
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    container:
+      image: aqlt/publishtc:latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Update data
+      run: Rscript R/1-download-data.R
+
+    - name: Update Trend-Cycle estimates
+      run: Rscript R/2-compute-tc.R
+
+    - name: Commit changes
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add data
+        git commit -m "Update data"
+        git push
+
+  generate-reports:
+    runs-on: ubuntu-latest
+    container:
+      image: aqlt/publishtc:latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Generate Quarto reports
+      run: |
+        for file in report/*.qmd; do
+          if [[ "$(basename "$file")" != "template.qmd" ]]; then
+            quarto render "$file"
+          fi
+        done
+
+    - name: Deploy to gh-pages
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git checkout gh-pages
+        cp -r report/* .
+        git add .
+        git commit -m "Update reports"
+        git push origin gh-pages
