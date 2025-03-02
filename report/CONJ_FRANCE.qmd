@@ -3,8 +3,16 @@ format:
   html:
     toc: true
     number-sections: true
-    embed-ressources: true
+    embed-resources: true
     number-depth: 2
+    other-links:
+      - text: More surveys/data
+        icon: patch-plus
+        href: https://aqlt.github.io/publishTC.wp/
+    code-links:
+      - text: AQLT/publishTC.wp
+        icon: github
+        href: https://github.com/AQLT/publishTC.wp
 date: today
 date-format: long
 params:
@@ -24,16 +32,20 @@ eval: true
 
 ```{r}
 #| include: false
-##| cache: false
+#| cache: false
 library(publishTC)
 library(ggplot2)
 library(patchwork)
+library(plotly)
 spec <- yaml::read_yaml(params$file)
 spec_series <- spec$series
 list_files <- list.files(pattern = "csv$", path = file.path(dirname(params$file), spec$dataset), full.names = TRUE, include.dirs = FALSE)
 all_data <- lapply(list_files, read.ts, list = TRUE)
 names(all_data) <- tools::file_path_sans_ext(basename(list_files))
 n <- length(all_data)
+if (n == 1) {
+    spec$plots$revision_history$enabled <- FALSE
+}
 series <- names(all_data[[1]])
 names(series) <- series
 
