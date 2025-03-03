@@ -197,7 +197,8 @@ for (f in files){
     )
     file.copy(
         "report/template.qmd",
-        new_template
+        new_template,
+        overwrite = TRUE
         )
     template <- readLines(new_template)
     i_file <- grep("file:", template)
@@ -205,3 +206,10 @@ for (f in files){
     writeLines(template, new_template)
 }
 
+
+files <- list.files(path = "report", pattern = ".qmd", full.names = TRUE)
+files <- grep("template", files, value = TRUE, invert = TRUE)
+for (f in files){
+    print(f)
+    quarto::quarto_render(f)
+}
