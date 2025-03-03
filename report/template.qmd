@@ -17,8 +17,8 @@ date: today
 date-format: long
 params:
   file: "../data/IPI.yml"
-execute:
-  cache: true
+# execute:
+#   cache: true
 author:
   - name: Alain Quartier-la-Tente 
     affiliation: LEMNA
@@ -99,7 +99,7 @@ if (spec$plots$revision_history$enabled) {
 		rownames(data_rev) <- NULL
 		data_rev
 	}
-	dt_table <- function(data, group_cols = 2, i_row_name = 1, digits = spec$plots$revision_history$table$digits,
+	dt_table <- function(data, group_cols = 2, i_row_name = 1, nb_digits = digits,
 						 caption = NULL) {
 		group_cols[group_cols > i_row_name] <- group_cols[group_cols > i_row_name] - 1
 		is_num <- which(sapply(data[,-i_row_name], is.numeric))
@@ -116,7 +116,7 @@ if (spec$plots$revision_history$enabled) {
 			rownames = data[,i_row_name],
 			caption = caption
 		) |>  DT::formatRound(columns = is_num,
-							  digits= digits)
+							  digits= nb_digits)
 	}
 	
 	rev_data <- lapply(basename(list_files), function(f){
