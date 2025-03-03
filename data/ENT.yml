@@ -16,7 +16,7 @@ series:
     length: 13.0
   creation_ent_be:
     idbank: '010755566'
-    description: A10 BE - Industrie
+    description: Industrie (BE)
     outliers:
       ao:
       - 2020.1666667
@@ -34,7 +34,7 @@ series:
     length: 13.0
   creation_ent_cz:
     idbank: '010755562'
-    description: A21 C - Industrie manufacturière
+    description: Industrie manufacturière (CZ)
     outliers:
       ao:
       - 2020.25
@@ -51,7 +51,7 @@ series:
     length: 13.0
   creation_ent_fz:
     idbank: '010755435'
-    description: A10 FZ - Construction
+    description: Construction (FZ)
     outliers:
       ao: 2020.25
       ao_tc: ~
@@ -65,7 +65,7 @@ series:
     length: 13.0
   creation_ent_gi:
     idbank: '010755540'
-    description: A10 GI - Commerce, transport, hébergement, restauration
+    description: Commerce, transport, hébergement, restauration (GI)
     outliers:
       ao:
       - 2020.1666667
@@ -80,7 +80,7 @@ series:
     length: 13.0
   creation_ent_g:
     idbank: '010755433'
-    description: A21 G - Commerce et réparation automobile
+    description: Commerce et réparation automobile (G)
     outliers:
       ao: 2016.0833333
       ao_tc: ~
@@ -92,7 +92,7 @@ series:
     length: 13.0
   creation_ent_h:
     idbank: '010755776'
-    description: A21 H - Transports
+    description: Transports (H)
     outliers:
       ao:
       - 2014.8333333
@@ -111,7 +111,7 @@ series:
     length: 13.0
   creation_ent_i:
     idbank: '010755560'
-    description: A21 I - Hébergement, restauration
+    description: Hébergement, restauration (I)
     outliers:
       ao:
       - 2020.25
@@ -127,7 +127,7 @@ series:
     length: 13.0
   creation_ent_jz:
     idbank: 010755568
-    description: A10 JZ - Information et communication
+    description: Information et communication (JZ)
     outliers:
       ao:
       - 2020.25
@@ -140,7 +140,7 @@ series:
     length: 13.0
   creation_ent_kz:
     idbank: '010755544'
-    description: A10 KZ - Activités financières et d'assurance
+    description: Activités financières et d'assurance (KZ)
     outliers:
       ao:
       - 2019.8333333
@@ -156,7 +156,7 @@ series:
     length: 13.0
   creation_ent_lz:
     idbank: '010755564'
-    description: A10 LZ - Activités immobilières
+    description: Activités immobilières (LZ)
     outliers:
       ao:
       - 2020.1666667
@@ -170,8 +170,8 @@ series:
     length: 13.0
   creation_ent_mn:
     idbank: '010755774'
-    description: A10 MN - Activités spécialisées, scientifiques et techniques et activités
-      de services administratifs et de soutien
+    description: Activités spécialisées, scientifiques et techniques et activités
+      de services administratifs et de soutien (MN)
     outliers:
       ao:
       - 2020.25
@@ -184,8 +184,8 @@ series:
     length: 13.0
   creation_ent_oq:
     idbank: '010755542'
-    description: A10 OQ - Administration publique, enseignement, santé humaine et
-      action sociale
+    description: Administration publique, enseignement, santé humaine et
+      action sociale (OQ)
     outliers:
       ao:
       - 2020.1666667
@@ -197,7 +197,7 @@ series:
     length: 13.0
   creation_ent_ru:
     idbank: '010755302'
-    description: A10 RU - Autres activités de services
+    description: Autres activités de services (RU)
     outliers:
       ao: 2020.25
       ao_tc: ~
