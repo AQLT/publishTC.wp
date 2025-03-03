@@ -1,0 +1,42 @@
+---
+title: "Liste des enquêtes"
+format: 
+  html:
+    toc: true
+    number-sections: true
+    embed-resources: true
+    number-depth: 2
+    code-links:
+      - text: AQLT/publishTC.wp
+        icon: github
+        href: https://github.com/AQLT/publishTC.wp
+date: today
+date-format: long
+params:
+  file: "../data/IPI.yml"
+execute:
+  cache: true
+author:
+  - name: Alain Quartier-la-Tente 
+    affiliation: LEMNA
+    orcid: 0000-0001-7890-3857
+comments: 
+    hypothesis:
+      theme: clean
+---
+
+
+
+```{r}
+#| results: asis
+#| echo: false
+list_files <- list.files(pattern = "yml$", path = dirname(params$file), full.names = TRUE)
+for (f in list_files) {
+    data <- yaml::read_yaml(f)
+    cat(sprintf("\n\n- [%s](%s.html) (%i series)",
+        data$datasetname,
+        basename(tools::file_path_sans_ext(f)),
+        length(data$series))
+    )
+}
+```
