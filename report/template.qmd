@@ -2,6 +2,7 @@
 format: 
   html:
     toc: true
+    fig-format: png
     number-sections: true
     embed-resources: true
     number-depth: 2
@@ -23,9 +24,6 @@ author:
   - name: Alain Quartier-la-Tente 
     affiliation: LEMNA
     orcid: 0000-0001-7890-3857
-comments: 
-    hypothesis:
-      theme: clean
 echo: false
 eval: true
 ---
