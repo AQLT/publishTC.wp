@@ -150,7 +150,7 @@ for (f in files){
         list(nyears = 4,
              digits = 2,
              bymethods = list(
-                 enabled = TRUE,
+                 enabled = FALSE,
                  name = "By methods"
              ),
              byplots = list(
@@ -209,7 +209,20 @@ for (f in files){
 
 files <- list.files(path = "report", pattern = ".qmd", full.names = TRUE)
 files <- grep("template", files, value = TRUE, invert = TRUE)
+
+# for (f in files){
+#     print(f)
+#     quarto::quarto_render(f)
+# }
+
+library(future)
+plan(multisession)
+fs <- list()
 for (f in files){
     print(f)
-    quarto::quarto_render(f)
+    fs[[f]] <- future({
+        quarto::quarto_render(f,quiet = TRUE)
+    })
 }
+fs <- lapply(fs, FUN = future::value)
+quarto::quarto_render("report/index.qmd")
