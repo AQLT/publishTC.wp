@@ -184,8 +184,8 @@ series:
     length: 13.0
   creation_ent_oq:
     idbank: '010755542'
-    description: Administration publique, enseignement, santé humaine et
-      action sociale (OQ)
+    description: Administration publique, enseignement, santé humaine et action sociale
+      (OQ)
     outliers:
       ao:
       - 2020.1666667
@@ -231,7 +231,7 @@ plots:
   nyears: 4.0
   digits: 2.0
   bymethods:
-    enabled: yes
+    enabled: no
     name: By methods
   byplots:
     enabled: yes

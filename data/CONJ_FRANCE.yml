@@ -64,7 +64,7 @@ plots:
   nyears: 4.0
   digits: 2.0
   bymethods:
-    enabled: yes
+    enabled: no
     name: By methods
   byplots:
     enabled: yes
