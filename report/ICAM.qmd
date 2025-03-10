@@ -190,7 +190,7 @@ if (spec$plots$revision_history$enabled) {
 				})
 			)
 			rev_tot_by_method <- rev_tot_by_method[rev_tot_by_method[, "Last date"] != colnames(rev_tot_by_method)[4], -4]
-			rev_tot_by_method
+			rev_tot_by_method[with(rev_tot_by_method, order(Meth,`Last date`, Methods)), ]
 		})
 	}
 	
@@ -233,13 +233,14 @@ for (serie in names(all_data[[1]])) {
 	if (spec$plots$bymethods$enabled){
 		cat("## ", spec$plots$bymethods$name)
 		cat("\n\n::::: {.panel-tabset}\n")
-		for (methods in names(last_est_s)) {
+		for (i in seq_along(last_est_s)) {
+		    methods <- names(last_est_s)[i]
 			cat(sprintf("\n### %s\n\n", gsub("\n", " ", methods)))
 			first_date <- time(last_est_s[[methods]]$tc)[length(last_est_s[[methods]]$tc)] - spec$plots$nyears
 			range_y <- range(window(ts.union(last_est_s[[methods]]$tc, last_est_s[[methods]]$x), start = first_date))
 			cat(knitr::knit_child(text = c(
 				"```{r}",
-				sprintf("#| label: bymethods-%s-%s", serie, studied_methods[methods]),
+				sprintf("#| label: bymethods-%s-%s", serie, studied_methods[i]),
 				'wrap_plots(all_plots[[methods]]) +
 			plot_layout(axes = "collect") &
 			theme_bw() & theme(legend.title = element_blank(), legend.position = "bottom") &
@@ -272,7 +273,7 @@ for (serie in names(all_data[[1]])) {
 			range_y <- range(window(ts.union(last_est_s[[1]]$tc, last_est_s[[1]]$x), start = first_date))
 			cat(knitr::knit_child(text = c(
 				"```{r}",
-				sprintf("#| label: byplots-%s-%s", serie, studied_methods[methods]),
+				sprintf("#| label: byplots-%s-%s", serie, plot),
 				'wrap_plots(byplots[[plot]]) +
 			plot_layout(guides = "collect", axes = "collect") &
 			theme_bw() & theme(legend.title = element_blank(), legend.position = "bottom") &
@@ -333,13 +334,15 @@ for (serie in names(all_data[[1]])) {
 		cat("## ", spec$plots$revision_history$name)
 		
 		cat("\n\n::::: {.panel-tabset}\n")
-		for (methods in names(rev_data_s)) {
+		for (i in seq_along(rev_data_s)) {
+		    methods <- names(rev_data_s)[i]
 			cat(sprintf("\n### %s\n\n", gsub("\n", " ", methods)))
 			first_date <- time(rev_data_s[[methods]])[length(time(rev_data_s[[methods]]))] - spec$plots$nyears
 			range_y <- range(window(rev_data_s[[methods]], start = first_date), na.rm = TRUE)
 			cat(knitr::knit_child(text = c(
 				"```{r}",
-				sprintf("#| label: revisions-%s-%s", serie, studied_methods[methods]),
+				"#| fig-height: 5",
+				sprintf("#| label: revisions-%s-%s", serie, c("rav", studied_methods)[i]),
 				'autoplot(round(rev_data_s[[methods]], digits)) +
 			theme_bw() + theme(legend.title = element_blank(), legend.position = "bottom") +
 			labs(x = NULL, y = NULL) +
