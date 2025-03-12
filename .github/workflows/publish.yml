@@ -29,29 +29,21 @@ jobs:
         git commit -m "Update data"
         git push
 
-  generate-reports:
-    runs-on: ubuntu-latest
-    container:
-      image: aqlt/publishtc:latest
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Generate Quarto reports
-      run: |
-        for file in report/*.qmd; do
-          if [[ "$(basename "$file")" != "template.qmd" ]]; then
-            quarto render "$file"
-          fi
-        done
+    - name: Render documents
+      run: Rscript R/3-render.R
 
     - name: Deploy to gh-pages
       run: |
-        git config --local user.name 'github-actions[bot]'
-        git config --local user.email 'github-actions[bot]@users.noreply.github.com'
-        git checkout gh-pages
-        cp -r report/* .
-        git add .
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git checkout --orphan latest_branch
+        # Supprimer tous les fichiers sauf le dossier .git
+        find . -maxdepth 1 ! -name '.git' ! -name 'template' -exec rm -rf {} +
+        git reset
+        # Copier uniquement les fichiers HTML du dossier template à la racine
+        cp template/*.html .
+        git add *.html
         git commit -m "Update reports"
-        git push origin gh-pages
+        git branch -D gh-pages
+        git branch -m gh-pages
+        git push origin gh-pages --force
