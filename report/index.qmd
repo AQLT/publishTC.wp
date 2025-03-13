@@ -33,7 +33,7 @@ for (f in list_files) {
     data <- yaml::read_yaml(f)
     cat(sprintf("\n\n- [%s](%s.html) (%i series)",
         data$datasetname,
-        basename(tools::file_path_sans_ext(f)),
+        data$dataset,
         length(data$series))
     )
 }
