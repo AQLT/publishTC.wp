@@ -403,7 +403,7 @@ for (serie in names(all_data[[1]])) {
 			if (!is.null(outliers[[serie]]$ao_tc)) {
 				cat(
 					"\n\n- - *Additive outlier* (AO) associated to Trend-Cycle:",
-					knitr::combine_words(format(zoo::as.yearmon(outliers[[serie]]$ao), "%B %Y")),
+					knitr::combine_words(format(zoo::as.yearmon(outliers[[serie]]$ao_tc), "%B %Y")),
 					"\n\n"
 				)
 			}
@@ -411,7 +411,7 @@ for (serie in names(all_data[[1]])) {
 			if (!is.null(outliers[[serie]]$ls)) {
 				cat(
 					"\n\n- *Level shift* (LS):",
-					knitr::combine_words(format(zoo::as.yearmon(outliers[[serie]]$ao), "%B %Y")),
+					knitr::combine_words(format(zoo::as.yearmon(outliers[[serie]]$ls), "%B %Y")),
 					"\n\n"
 				)
 			}
