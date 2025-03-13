@@ -22,15 +22,15 @@ series:
       - 2022.1666667
     first_date: 2012.0
     length: 13.0
-  icam_evpp:
-    idbank: 000857191
-    description: Évolution passée des prix
-    outliers:
-      ao: 2020.25
-      ao_tc: ~
-      ls: 2019.0
-    first_date: 2012.0
-    length: 13.0
+  # icam_evpp:
+  #   idbank: 000857191
+  #   description: Évolution passée des prix
+  #   outliers:
+  #     ao: 2020.25
+  #     ao_tc: ~
+  #     ls: 2019.0
+  #   first_date: 2012.0
+  #   length: 13.0
   icam_ial:
     idbank: 001616794
     description: Intentions d'achats de logements
@@ -122,15 +122,15 @@ series:
       ls: 2015.3333333
     first_date: 2012.0
     length: 13.0
-  icam_abe:
-    idbank: 001616793
-    description: Achats de biens d'équipement prévus
-    outliers:
-      ao: ~
-      ao_tc: ~
-      ls: 2012.5
-    first_date: 2012.0
-    length: 13.0
+  # icam_abe:
+  #   idbank: 001616793
+  #   description: Achats de biens d'équipement prévus
+  #   outliers:
+  #     ao: ~
+  #     ao_tc: ~
+  #     ls: 2012.5
+  #   first_date: 2012.0
+  #   length: 13.0
   icam_sfp:
     idbank: 000857196
     description: Situation financière passée
@@ -151,15 +151,15 @@ series:
       ls: 2022.1666667
     first_date: 2012.0
     length: 13.0
-  icam_iav:
-    idbank: 001616792
-    description: Intentions d'achats de voitures
-    outliers:
-      ao: ~
-      ao_tc: ~
-      ls: ~
-    first_date: 2012.0
-    length: 13.0
+  # icam_iav:
+  #   idbank: 001616792
+  #   description: Intentions d'achats de voitures
+  #   outliers:
+  #     ao: ~
+  #     ao_tc: ~
+  #     ls: ~
+  #   first_date: 2012.0
+  #   length: 13.0
 methods:
   henderson:
     name: Henderson
