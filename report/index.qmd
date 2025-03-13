@@ -1,5 +1,5 @@
 ---
-title: "Liste des enquêtes"
+title: "List of publications"
 format: 
   html:
     toc: true
@@ -14,8 +14,6 @@ date: today
 date-format: long
 params:
   file: "../data/IPI.yml"
-execute:
-  cache: true
 author:
   - name: Alain Quartier-la-Tente 
     affiliation: LEMNA
