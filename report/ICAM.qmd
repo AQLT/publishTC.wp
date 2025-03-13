@@ -293,9 +293,9 @@ for (serie in names(all_data[[1]])) {
 		
 		cat("## ", spec$plots$comparison_plot$name)
 		
-		data_comp <- do.call(ts.union, lapply(last_est_s, `[[`, "tc"))
-		first_date <- time(last_est_s[[1]]$tc)[length(last_est_s[[1]]$tc)] - spec$plots$nyears
-		range_y <- range(unlist(lapply(last_est_s, function(x) range(window(ts.union(x$tc), start = first_date)))))
+		data_comp <- do.call(ts.union, c(list("y" = last_est_s[[1]][["x"]]), lapply(last_est_s, `[[`, "tc")))
+		first_date <- time(data_comp)[nrow(data_comp)] - spec$plots$nyears
+		range_y <- range(window(data_comp, start = first_date))
 		cat("\n\n::::: {.panel-tabset}\n")
 		
 		cat("\n### Short\n")
