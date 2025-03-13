@@ -38,10 +38,13 @@ jobs:
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
         git checkout --orphan latest_branch
         # Supprimer tous les fichiers sauf le dossier .git
-        find . -maxdepth 1 ! -name '.git' ! -name 'template' -exec rm -rf {} +
+        shopt -s extglob
+        rm -rf !(report|.git)
+        #find . -maxdepth 1 ! -name '.git' ! -name 'report' -exec rm -rf {} +
         git reset
-        # Copier uniquement les fichiers HTML du dossier template à la racine
-        cp template/*.html .
+        # Copier uniquement les fichiers HTML du dossier report à la racine
+        cp report/*.html .
+        [ -f template.html ] && rm template.html
         git add *.html
         git commit -m "Update reports"
         git branch -D gh-pages
