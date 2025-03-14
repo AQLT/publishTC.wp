@@ -17,8 +17,16 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: list of files
-      run: ls
+    - name: Verify Git directory
+      run: |
+        if [ ! -d ".git" ]; then
+          echo ".git directory not found!"
+          exit 1
+        fi
+
+    - name: List of files
+      run: ls -la
+
     - name: restore
       run: R -e "renv::restore()"
 
