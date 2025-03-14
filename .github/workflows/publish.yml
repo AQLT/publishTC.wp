@@ -8,6 +8,8 @@ on:
 jobs:
   update-data:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     container:
       image: aqlt/publishtc:latest
 
@@ -27,19 +29,20 @@ jobs:
 
     - name: Commit changes
       run: |
-        git config --local user.name 'github-actions[bot]'
-        git config --local user.email 'github-actions[bot]@users.noreply.github.com'
+        git config --local user.name actions-user
+        git config --local user.email "actions@github.com"
         git add data
         git commit -m "Update data"
         git push
+      env:
+          REPO_KEY: ${{secrets.GITHUB_TOKEN}}
+          username: github-actions
 
     - name: Render documents
       run: Rscript R/3-render.R
 
     - name: Deploy to gh-pages
       run: |
-        git config --global user.name 'github-actions[bot]'
-        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
         git checkout --orphan latest_branch
         # Supprimer tous les fichiers sauf le dossier .git
         shopt -s extglob
@@ -54,3 +57,7 @@ jobs:
         git branch -D gh-pages
         git branch -m gh-pages
         git push origin gh-pages --force
+      env:
+          REPO_KEY: ${{secrets.GITHUB_TOKEN}}
+          username: github-actions
+
