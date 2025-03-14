@@ -17,6 +17,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Add Git safe directory
+      run: git config --global --add safe.directory /__w/publishTC.wp/publishTC.wp
+
     - name: Verify Git directory
       run: |
         if [ ! -d ".git" ]; then
