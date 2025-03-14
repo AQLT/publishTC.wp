@@ -15,6 +15,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+
+    - name: restore
+      run: R -e "renv::restore()"
+
     - name: Update data
       run: Rscript R/1-download-data.R
 
