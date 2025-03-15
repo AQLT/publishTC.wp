@@ -62,21 +62,19 @@ jobs:
         for file in template/*.qmd; do
           if [[ "$(basename "$file")" != "template.qmd" && "$(basename "$file")" != "index.qmd" ]]; then
           # Afficher le nom du fichier en cours de traitement
-          echo "Rendering file: $(basename "$file")"
-          # Afficher l'heure actuelle
-          echo "Time: $(date)"
+            echo "Rendering file: $(basename "$file") $(date)"
           # Rendre le fichier avec Quarto
-          quarto render "$file"
-        fi
+            quarto render "$file"
+          fi
         done
 
     - name: Deploy to gh-pages
       run: |
         git checkout --orphan latest_branch
         # Supprimer tous les fichiers sauf le dossier .git
-        shopt -s extglob
-        rm -rf !(report|.git)
-        #find . -maxdepth 1 ! -name '.git' ! -name 'report' -exec rm -rf {} +
+        #shopt -s extglob
+        #rm -rf !(report|.git)
+        find . -maxdepth 1 ! -name '.git' ! -name 'report' -exec rm -rf {} +
         git reset
         # Copier uniquement les fichiers HTML du dossier report à la racine
         cp report/*.html .
