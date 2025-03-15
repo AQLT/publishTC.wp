@@ -7,14 +7,7 @@ files <- sapply(files, function(f) {
     )
 })
 
-library(future)
-plan(multisession)
-options(future.rng.onMisuse="ignore")
-fs <- list()
 for (f in files){
     print(f)
-    fs[[f]] <- future({
-        quarto::quarto_render(f,quiet = TRUE)
-    })
+    quarto::quarto_render(f,quiet = TRUE)
 }
-fs <- lapply(fs, FUN = future::value)

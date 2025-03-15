@@ -17,18 +17,18 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Add Git safe directory
-      run: git config --global --add safe.directory /__w/publishTC.wp/publishTC.wp
-
-    - name: Verify Git directory
-      run: |
-        if [ ! -d ".git" ]; then
-          echo ".git directory not found!"
-          exit 1
-        fi
-
-    - name: List of files
-      run: ls -la
+    # - name: Add Git safe directory
+    #   run: git config --global --add safe.directory /__w/publishTC.wp/publishTC.wp
+    #
+    # - name: Verify Git directory
+    #   run: |
+    #     if [ ! -d ".git" ]; then
+    #       echo ".git directory not found!"
+    #       exit 1
+    #     fi
+    #
+    # - name: List of files
+    #   run: ls -la
 
     - name: restore
       run: R -e "renv::restore()"
@@ -40,6 +40,7 @@ jobs:
       run: Rscript R/2-compute-tc.R
 
     - name: Commit changes
+    # Bien penser à aller dans Settings > Actions > General > Workflow permissions > Read and write permissions
       run: |
         git config --local user.name actions-user
         git config --local user.email "actions@github.com"
@@ -55,7 +56,7 @@ jobs:
           username: github-actions
 
     - name: Render documents
-      run: Rscript R/3-render.R
+      run: Rscript R/3b-render.R
 
     - name: Deploy to gh-pages
       run: |
