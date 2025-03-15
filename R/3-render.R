@@ -8,7 +8,7 @@ files <- sapply(files, function(f) {
 })
 
 library(future)
-plan(multisession)
+plan(multicore)
 options(future.rng.onMisuse="ignore")
 fs <- list()
 for (f in files){
