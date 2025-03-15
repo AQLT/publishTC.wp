@@ -17,8 +17,8 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    # - name: Add Git safe directory
-    #   run: git config --global --add safe.directory /__w/publishTC.wp/publishTC.wp
+    - name: Add Git safe directory
+      run: git config --global --add safe.directory /__w/publishTC.wp/publishTC.wp
     #
     # - name: Verify Git directory
     #   run: |
@@ -42,8 +42,8 @@ jobs:
     - name: Commit changes
     # Bien penser à aller dans Settings > Actions > General > Workflow permissions > Read and write permissions
       run: |
-        git config --local user.name actions-user
-        git config --local user.email "actions@github.com"
+        git config --gloabl user.name actions-user
+        git config --global user.email "actions@github.com"
         git add data
         if git diff-index --quiet HEAD --; then
           echo "No changes to commit"
