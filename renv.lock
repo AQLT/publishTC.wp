@@ -902,14 +902,11 @@
     },
     "publishTC": {
       "Package": "publishTC",
-      "Version": "0.1.0",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteUsername": "AQLT",
-      "RemoteRepo": "publishTC",
-      "RemoteRef": "v0.1.0",
-      "RemoteSha": "e0a42116643a0592e91279b2efd56ca56a164af5",
+      "Version": "0.1.0.9000",
+      "Source": "Repository",
+      "Repository": "https://aqlt.r-universe.dev",
+      "RemoteUrl": "https://github.com/AQLT/publishTC",
+      "RemoteSha": "a02436dfbe38fa78b5d2979e75b549b740ed6427",
       "Requirements": [
         "R",
         "ggplot2",
@@ -918,7 +915,7 @@
         "rjd3x13",
         "zoo"
       ],
-      "Hash": "02ef03bfa0901f428b1e901adaa3c8a5"
+      "Hash": "9872db38141fb716fac8c5b8d9e96b15"
     },
     "purrr": {
       "Package": "purrr",
@@ -1009,14 +1006,14 @@
     },
     "rjd3toolkit": {
       "Package": "rjd3toolkit",
-      "Version": "3.3.0",
+      "Version": "3.3.0.9000",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "rjdverse",
       "RemoteRepo": "rjd3toolkit",
-      "RemoteRef": "v3.3.0",
-      "RemoteSha": "b36073717b91e9bcfa0dec8933aea8bdad07fb55",
+      "RemoteRef": "develop",
+      "RemoteSha": "f713f041337bdb7b9238df5a0bb6635d38047890",
       "Requirements": [
         "R",
         "RProtoBuf",
@@ -1024,7 +1021,7 @@
         "methods",
         "rJava"
       ],
-      "Hash": "87eefa1a4833a0cd3156f1fcc6d3350a"
+      "Hash": "e0e0a58b336f9ac262552a18c3e9f847"
     },
     "rjd3x13": {
       "Package": "rjd3x13",
