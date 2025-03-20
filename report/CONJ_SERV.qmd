@@ -39,15 +39,16 @@ library(patchwork)
 library(plotly)
 spec <- yaml::read_yaml(params$file)
 spec_series <- spec$series
+series <- names(spec_series)
+names(series) <- series
 list_files <- list.files(pattern = "csv$", path = file.path(dirname(params$file), spec$dataset), full.names = TRUE, include.dirs = FALSE)
 all_data <- lapply(list_files, read.ts, list = TRUE)
 names(all_data) <- tools::file_path_sans_ext(basename(list_files))
+all_data <- lapply(all_data, `[`, series)
 n <- length(all_data)
 if (n == 1) {
     spec$plots$revision_history$enabled <- FALSE
 }
-series <- names(all_data[[1]])
-names(series) <- series
 
 studied_methods <- sapply(spec$methods, `[[`, "eval")
 names_methods <- sapply(spec$methods, `[[`, "name")[which(studied_methods)]
@@ -64,141 +65,6 @@ last_est <- lapply(series, function(serie) {
 			  ls = spec_s$outliers$ls)
 })
 
-if (spec$plots$extra_info$enabled) {
-	extra_info <- lapply(last_est, function(sect) {
-		res <- lapply(sect, summary)
-		res <- do.call(
-			rbind,
-			lapply(res, function(x){
-				x[["I/C ratios"]] <- NULL
-				unlist(x)
-			}))
-		rownames(res) <- gsub("\n", " ", rownames(res))
-		res
-	})
-	
-	if (length(grep("robust", studied_methods)) > 0) {
-		outliers <- lapply(spec_series, `[[`, "outliers")
-	} else {
-		outliers <- lapply(spec_series, function(x) NULL)
-	}
-	
-}
-
-
-if (spec$plots$revision_history$enabled) {
-	rev_to_table <- function(x) {
-		data_rev <- t(do.call(ts.union, x))
-		data_rev <- data_rev[,ncol(data_rev):1] # last date first
-		data_rev <- data.frame(
-			`Last date` = gsub("_", "-", rep(colnames(x[[1]]), length(x))),
-			Methods = rep(names(x), each = ncol(x[[1]])), 
-			data_rev,
-			check.names = FALSE)
-		colnames(data_rev)[-(1:2)] <- rev(format(zoo::as.Date(time(x[[1]])), "%Y-%m"))
-		rownames(data_rev) <- NULL
-		data_rev
-	}
-	dt_table <- function(data, group_cols = 2, i_row_name = 1, nb_digits = digits,
-						 caption = NULL) {
-		group_cols[group_cols > i_row_name] <- group_cols[group_cols > i_row_name] - 1
-		is_num <- which(sapply(data[,-i_row_name], is.numeric))
-		DT::datatable(
-			data[,-i_row_name],
-			extensions = c("RowGroup", "Buttons"),
-			options = list(
-				rowGroup = list(dataSrc = group_cols),
-				columnDefs = list(list(targets = group_cols, visible = FALSE)),
-				dom = "Brtipl",
-				buttons = c("copy", "csv", "excel", "pdf")
-			),
-			selection = "none",
-			rownames = data[,i_row_name],
-			caption = caption
-		) |>  DT::formatRound(columns = is_num,
-							  digits= nb_digits)
-	}
-	
-	rev_data <- lapply(basename(list_files), function(f){
-		res <- lapply(studied_methods, function(method) {
-			read.ts(file.path(dirname(params$file), spec$dataset, method, f), list = TRUE)
-		})
-		c(list("Raw data" = lapply(all_data[[tools::file_path_sans_ext(f)]], window, 
-								   start = min(sapply(spec_series, `[[`, "first_date")))),
-		  res)
-	})
-	names(rev_data) <- names(all_data)
-	rev_data <- rev(rev_data)
-	rev_data_ <- lapply(names(rev_data[[1]][[1]]), function(serie){
-		res <- lapply(names(rev_data[[1]]), function(method){
-			do.call(ts.union, lapply(rev_data, function(x){
-				x[[method]][[serie]]
-			}))
-		})
-		names(res) <- names(rev_data[[1]])
-		res
-	})
-	names(rev_data_) <- names(rev_data[[1]][[1]])
-	rev_data <- rev_data_
-	rm(rev_data_)
-	
-	if (spec$plots$revision_history$table$contribution_of_sa) {
-		rev_data_fixed <- lapply(series, function(serie) {
-			spec_s <- spec$series[[serie]]
-			y <- window(all_data[[n]][[serie]], start = spec$series[[serie]]$first_date)
-			vintages <- lapply(all_data[-n], function(vintage){
-				window(y, end = end(vintage[[serie]]))
-			})
-			lapply(studied_methods, function(method) {
-				method_name <- names(studied_methods)[which(studied_methods == method)]
-				res <- c(lapply(vintages, function(x) {
-					
-					smoothing(x = x, methods = method, length = spec_s$length, 
-							  ao = spec_s$outliers$ao,
-							  ao_tc = spec_s$outliers$ao_tc,
-							  ls = spec_s$outliers$ls)[[1]][["tc"]]
-				}),
-				list(last_est[[serie]][[method_name]][["tc"]])
-				)
-				res <- do.call(ts.union, rev(res))
-				colnames(res) <- colnames(rev_data[[serie]][[method_name]])
-				res
-			})
-		})
-		
-		rev_tot <- lapply(series, function(serie) {
-			rev_by_method <- lapply(names(studied_methods), function(method){
-				data <- rev_data_fixed[[serie]][[method]]
-				data_tot <- rev_data[[serie]][[method]]
-				rev_tc <- (data[,1] - data)
-				rev_tot <- (data_tot[,1] - data_tot)
-				rev_tot <- rev_tot
-				rev_sa <- rev_tot - rev_tc
-				colnames(rev_tc) <- colnames(rev_sa) <- colnames(rev_tot) <- colnames(data_tot)
-				list(
-					Total = rev_tot, 
-					`Due to revisions on SA` = rev_sa, 
-					`Due to update of TC model` = rev_tc
-				)
-			})
-			names(rev_by_method) <- names(studied_methods)
-			rev_tot_by_method <- do.call(
-				rbind,
-				lapply(names(rev_by_method), function(method){
-					rev_meth <- rev_to_table(rev_by_method[[method]])
-					cbind(Meth = method, rev_meth)
-				})
-			)
-			rev_tot_by_method <- rev_tot_by_method[rev_tot_by_method[, "Last date"] != colnames(rev_tot_by_method)[4], -4]
-			rev_tot_by_method[with(rev_tot_by_method, order(Meth,`Last date`, Methods)), ]
-		})
-	}
-	
-	
-	
-	
-}
-
 plots <- unlist(spec$plots$kind)
 plots <- names(plots)[which(plots)]
 nrow_legend <- sum(c(any(plots %in% c("normal", "lollypop")), any(plots %in% c("implicit_forecast", "confint"))))
@@ -207,6 +73,141 @@ nrow_legend <- sum(c(any(plots %in% c("normal", "lollypop")), any(plots %in% c("
 ---
 title: "`r spec$datasetname`"
 ---
+
+```{r}
+#| label: extra-info
+#| eval: !expr spec$plots$extra_info$enabled
+extra_info <- lapply(last_est, function(sect) {
+    res <- lapply(sect, summary)
+    res <- do.call(
+        rbind,
+        lapply(res, function(x){
+            x[["I/C ratios"]] <- NULL
+            unlist(x)
+        }))
+    rownames(res) <- gsub("\n", " ", rownames(res))
+    res
+})
+
+if (length(grep("robust", studied_methods)) > 0) {
+    outliers <- lapply(spec_series, `[[`, "outliers")
+} else {
+    outliers <- lapply(spec_series, function(x) NULL)
+}
+```
+
+```{r}
+#| label: revision-history
+#| eval: !expr spec$plots$revision_history$enabled
+rev_to_table <- function(x) {
+    data_rev <- t(do.call(ts.union, x))
+    data_rev <- data_rev[,ncol(data_rev):1] # last date first
+    data_rev <- data.frame(
+        `Last date` = gsub("_", "-", rep(colnames(x[[1]]), length(x))),
+        Methods = rep(names(x), each = ncol(x[[1]])), 
+        data_rev,
+        check.names = FALSE)
+    colnames(data_rev)[-(1:2)] <- rev(format(zoo::as.Date(time(x[[1]])), "%Y-%m"))
+    rownames(data_rev) <- NULL
+    data_rev
+}
+dt_table <- function(data, group_cols = 2, i_row_name = 1, nb_digits = digits,
+                     caption = NULL) {
+    group_cols[group_cols > i_row_name] <- group_cols[group_cols > i_row_name] - 1
+    is_num <- which(sapply(data[,-i_row_name], is.numeric))
+    DT::datatable(
+        data[,-i_row_name],
+        extensions = c("RowGroup", "Buttons"),
+        options = list(
+            rowGroup = list(dataSrc = group_cols),
+            columnDefs = list(list(targets = group_cols, visible = FALSE)),
+            dom = "Brtipl",
+            buttons = c("copy", "csv", "excel", "pdf")
+        ),
+        selection = "none",
+        rownames = data[,i_row_name],
+        caption = caption
+    ) |>  DT::formatRound(columns = is_num,
+                          digits= nb_digits)
+}
+
+rev_data <- lapply(basename(list_files), function(f){
+    res <- lapply(studied_methods, function(method) {
+        read.ts(file.path(dirname(params$file), spec$dataset, method, f), list = TRUE)[series]
+    })
+    c(list("Raw data" = lapply(all_data[[tools::file_path_sans_ext(f)]], window, 
+                               start = min(sapply(spec_series, `[[`, "first_date")))),
+      res)
+})
+names(rev_data) <- names(all_data)
+rev_data <- rev(rev_data)
+rev_data_ <- lapply(names(rev_data[[1]][[1]]), function(serie){
+    res <- lapply(names(rev_data[[1]]), function(method){
+        do.call(ts.union, lapply(rev_data, function(x){
+            x[[method]][[serie]]
+        }))
+    })
+    names(res) <- names(rev_data[[1]])
+    res
+})
+names(rev_data_) <- names(rev_data[[1]][[1]])
+rev_data <- rev_data_
+rm(rev_data_)
+```
+
+```{r}
+#| label: revision-history-contribution-sa
+#| eval: !expr spec$plots$revision_history$enabled & spec$plots$revision_history$table$contribution_of_sa
+rev_data_fixed <- lapply(series, function(serie) {
+    spec_s <- spec$series[[serie]]
+    y <- window(all_data[[n]][[serie]], start = spec$series[[serie]]$first_date)
+    vintages <- lapply(all_data[-n], function(vintage){
+        window(y, end = end(vintage[[serie]]))
+    })
+    lapply(studied_methods, function(method) {
+        method_name <- names(studied_methods)[which(studied_methods == method)]
+        res <- c(lapply(vintages, function(x) {
+            
+            smoothing(x = x, methods = method, length = spec_s$length, 
+                      ao = spec_s$outliers$ao,
+                      ao_tc = spec_s$outliers$ao_tc,
+                      ls = spec_s$outliers$ls)[[1]][["tc"]]
+        }),
+        list(last_est[[serie]][[method_name]][["tc"]])
+        )
+        res <- do.call(ts.union, rev(res))
+        colnames(res) <- colnames(rev_data[[serie]][[method_name]])
+        res
+    })
+})
+
+rev_tot <- lapply(series, function(serie) {
+    rev_by_method <- lapply(names(studied_methods), function(method){
+        data <- rev_data_fixed[[serie]][[method]]
+        data_tot <- rev_data[[serie]][[method]]
+        rev_tc <- (data[,1] - data)
+        rev_tot <- (data_tot[,1] - data_tot)
+        rev_tot <- rev_tot
+        rev_sa <- rev_tot - rev_tc
+        colnames(rev_tc) <- colnames(rev_sa) <- colnames(rev_tot) <- colnames(data_tot)
+        list(
+            Total = rev_tot, 
+            `Due to revisions on SA` = rev_sa, 
+            `Due to update of TC model` = rev_tc
+        )
+    })
+    names(rev_by_method) <- names(studied_methods)
+    rev_tot_by_method <- do.call(
+        rbind,
+        lapply(names(rev_by_method), function(method){
+            rev_meth <- rev_to_table(rev_by_method[[method]])
+            cbind(Meth = method, rev_meth)
+        })
+    )
+    rev_tot_by_method <- rev_tot_by_method[rev_tot_by_method[, "Last date"] != colnames(rev_tot_by_method)[4], -4]
+    rev_tot_by_method[with(rev_tot_by_method, order(Meth,`Last date`, Methods)), ]
+})
+```
 
 
 ```{r}
