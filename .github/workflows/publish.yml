@@ -83,7 +83,10 @@ jobs:
         git add *.html
         git commit -m "Update reports"
         git fetch origin
-        git branch -D gh-pages
+        # Supprimer la branche distante gh-pages si elle existe
+        if git show-ref --verify --quiet refs/remotes/origin/gh-pages; then
+           git push origin --delete gh-pages
+        fi
         git branch -m gh-pages
         git push origin gh-pages --force
       env:
