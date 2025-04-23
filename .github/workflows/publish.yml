@@ -4,8 +4,8 @@ permissions:
   contents: write
 
 on:
-#  schedule:
-#    - cron: '0 0 1 * *'  # Exécuter le 1er de chaque mois à minuit
+ # schedule:
+ #   - cron: '0 0 1 * *'  # Exécuter le 1er de chaque mois à minuit
   workflow_dispatch:
 
 jobs:
@@ -63,7 +63,7 @@ jobs:
     - name: Generate Quarto reports
       run: |
         for file in report/*.qmd; do
-          if [[ "$(basename "$file")" != "template.qmd" && "$(basename "$file")" != "index.qmd" ]]; then
+          if [[ "$(basename "$file")" != "template.qmd" ]]; then
           # Afficher le nom du fichier en cours de traitement
             echo "Rendering file: $(basename "$file") $(date)"
           # Rendre le fichier avec Quarto
