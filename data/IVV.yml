@@ -87,10 +87,10 @@ plots:
   digits: 2.0
   bymethods:
     enabled: no
-    name: By methods
+    name: Par méthode
   byplots:
     enabled: yes
-    name: By kind of plots
+    name: Par graphique
   kind:
     normal: yes
     confint: yes
@@ -99,10 +99,10 @@ plots:
   comparison_plot:
     enabled: yes
     interactive: yes
-    name: Comparison of methods
+    name: Comparaison des méthodes
   revision_history:
     enabled: yes
-    name: Analysis of revisions
+    name: Analyse des révisions
     table:
       enabled: yes
       contribution_of_sa: yes

@@ -1,5 +1,5 @@
 ---
-title: "List of publications"
+title: "Liste des publications"
 format: 
   html:
     toc: true
@@ -21,6 +21,9 @@ author:
 comments: 
     hypothesis:
       theme: clean
+lang: fr
+language:
+ title-block-author-single: Auteur
 ---
 
 

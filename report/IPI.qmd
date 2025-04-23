@@ -7,7 +7,7 @@ format:
     embed-resources: true
     number-depth: 2
     other-links:
-      - text: More surveys/data
+      - text: Autres publications
         icon: patch-plus
         href: https://aqlt.github.io/publishTC.wp/
     code-links:
@@ -24,10 +24,13 @@ author:
   - name: Alain Quartier-la-Tente 
     affiliation: LEMNA
     orcid: 0000-0001-7890-3857
+lang: fr
 echo: false
 eval: true
 fig-height: 6
 fig-width: 8
+language:
+ title-block-author-single: Auteur
 ---
 
 ```{r}
@@ -135,7 +138,7 @@ rev_data <- lapply(basename(list_files), function(f){
     res <- lapply(studied_methods, function(method) {
         read.ts(file.path(dirname(params$file), spec$dataset, method, f), list = TRUE)[series]
     })
-    c(list("Raw data" = lapply(all_data[[tools::file_path_sans_ext(f)]], window, 
+    c(list("Série brute" = lapply(all_data[[tools::file_path_sans_ext(f)]], window, 
                                start = min(sapply(spec_series, `[[`, "first_date")))),
       res)
 })
@@ -299,7 +302,7 @@ for (serie in names(all_data[[1]])) {
 		range_y <- range(window(data_comp, start = first_date))
 		cat("\n\n::::: {.panel-tabset}\n")
 		
-		cat("\n### Short\n")
+		cat("\n### Dernières années\n")
 		cat(knitr::knit_child(text = c(
 			"```{r}",
 				sprintf("#| label: comparison-%s", serie),
@@ -311,7 +314,7 @@ for (serie in names(all_data[[1]])) {
 			""
 		), envir = environment(), quiet = TRUE
 		))
-		cat("\n### All\n")
+		cat("\n### Ensemble\n")
 		
 		cat(knitr::knit_child(text = c(
 			"```{r}",
@@ -358,7 +361,7 @@ for (serie in names(all_data[[1]])) {
 		
 		if (spec$plots$revision_history$table$enabled) {
 			cat("## ", spec$plots$revision_history$name)
-			cat("\n### Revisions\n")
+			cat("\n### Révisions\n")
 			data_rev <- rev_to_table(rev_data_s)
 			cat(knitr::knit_child(text = c(
 				"```{r}",
@@ -368,7 +371,7 @@ for (serie in names(all_data[[1]])) {
 			), envir = environment(), quiet = TRUE
 			))
 			if (spec$plots$revision_history$table$contribution_of_sa) {
-				cat("\n### Revisions to last estimates\n")
+				cat("\n### Révisions à la dernière estimation\n")
 				cat(knitr::knit_child(text = c(
 					"```{r}",
 					'dt_table(rev_tot[[serie]], group_cols = 1:2, i_row_name = 3)',

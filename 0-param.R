@@ -151,11 +151,11 @@ for (f in files){
              digits = 2,
              bymethods = list(
                  enabled = FALSE,
-                 name = "By methods"
+                 name = "Par méthode"
              ),
              byplots = list(
                  enabled = TRUE,
-                 name = "By kind of plots"
+                 name = "Par graphique"
              ),
              kind = list(normal = TRUE,
                          confint = TRUE,
@@ -164,11 +164,11 @@ for (f in files){
              comparison_plot =  list(
                  enabled = TRUE,
                  interactive = TRUE,
-                 name = "Comparison of methods"
+                 name = "Comparaison des méthodes"
              ),
              revision_history = list(
                  enabled = TRUE,
-                 name = "Analysis of revisions",
+                 name = "Analyse des révisions",
                  table = list(
                      enabled = TRUE,
                      contribution_of_sa = TRUE
