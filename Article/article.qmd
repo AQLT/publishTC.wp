@@ -1,0 +1,331 @@
+---
+title: "Et si l'on publiait la tendance-cycle ?"
+format: 
+  html:
+    fig-width: 9
+    toc-depth: 3
+    include-before-body: template/preambule.html
+    css: [template/style.css]
+    output-file: index
+    code-links:
+      - text: AQLT/publishTC.wp
+        icon: github
+        href: https://github.com/AQLT/publishTC.wp
+      - text: Package AQLT/publishTC
+        icon: github
+        href: https://github.com/AQLT/publishTC
+    other-links:
+      - text: Liste des publications
+        icon: github
+        href: https://aqlt.github.io/publishTC.wp/
+    crossref: 
+      title-delim: "&nbsp;-"
+     
+  pdf:
+    include-in-header: template/preambule.tex
+    keep-tex: true
+    classoption: french
+    cite-method: biblatex
+    pdf-engine: pdflatex
+    papersize: A4
+    fig-width: 7.5
+    fig-height: 3.5
+    toc: false # to include abstract first
+    fig-pos: 'H'
+    geometry:
+      - top=2cm
+      - bottom=2cm
+      - left = 2.5cm
+      - right = 2.5cm
+  # docx:
+  #   number-sections: true
+  #   fig-width: 6.3 # 16cm
+  #   crossref:
+  #     title-delim: "-"
+crossref:
+  tbl-prefix: table
+  fig-prefix: figure
+  sec-prefix: section
+  eq-prefix: équation
+execute: 
+  cache: true
+lang: fr
+language:
+ title-block-author-single: Auteur
+echo: false
+toc: true
+number-sections: true
+tbl-cap-location: top
+fig-cap-location: top
+bibliography: biblio.bib
+csl: template/chicago-author-date.csl
+author:
+  - name: Alain Quartier-la-Tente 
+    affiliation: LEMNA
+    orcid: 0000-0001-7890-3857
+comments: 
+    hypothesis:
+      theme: clean
+---
+
+\renewcommand{\thepage}{\roman{page}}
+
+
+```{r}
+#| include: false
+#| label: setup
+library(rjd3filters)
+library(ggplot2)
+library(patchwork)
+options(is_french = TRUE)
+if (getOption("is_french")) {
+	current_local <- Sys.getlocale("LC_TIME")
+	Sys.setlocale("LC_TIME","fr_FR.UTF-8")
+	options(OutDec = ",")
+}
+palette_coef <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", 
+				  "#0072B2", "#D55E00", "#CC79A7", "#999999")
+```
+
+
+### Résumé {-}
+
+:::: {.abstract}
+Cette étude s'intéresse à l'estimation en temps réel de la tendance-cycle autour de chocs et de points de retournement.
+Les moyennes mobiles linéaires classiquement utilisées pour l'estimation de la tendance-cycle, sensibles à la présence de points atypiques, sont comparées à des méthodes non-linéaires robustes.
+Nous proposons également une méthodologie pour étendre les moyennes mobiles de Henderson et de Musgrave afin de prendre en compte des informations extérieurs et ainsi construire des moyennes mobiles robustes à la présence de certains chocs.
+Nous décrivons comment estimer des intervalles de confiance pour les estimations issues de moyennes mobiles, ce qui permet de valider l'utilisation de ces nouvelle moyennes mobiles.
+En comparant les méthodes sur des séries simulées et réelles, nous montrons que : construire des moyennes mobiles robustes permet de réduire les révisions et de mieux modéliser les points de retournement autour de chocs, sans dégrader les estimations lorsqu'aucun choc n'est observé ; les méthodes non-linéaires robustes ne permettent pas d'extraire une composante tendance-cycle satisfaisante pour l'analyse conjoncturelle, avec parfois des révisions importantes.
+
+Cette étude est entièrement reproductible et tous les codes utilisés sont disponibles sous <https://github.com/AQLT/publishTC.wp>.
+
+Mots clés : séries temporelles, tendance-cycle, désaisonnalisation, points de retournement.
+::::
+
+
+### Abstract {-}
+
+:::: {.abstract}
+
+
+This study is fully reproducible and all the codes used are available under <https://github.com/AQLT/publishTC.wp>.
+
+Keywords: time series, trend-cycle, seasonal adjustment, turning points.
+::::
+
+JEL Classification: C22, E32.
+
+```{=latex}
+\newpage
+\renewcommand*\contentsname{Table des matières}
+{
+\hypersetup{linkcolor=}
+\setcounter{tocdepth}{2}
+\tableofcontents
+}
+\newpage
+\pagenumbering{arabic}
+```
+
+
+# Introduction
+
+Dans des les instituts nationaux de statistiques, il est courant de publier des séries chronologiques corrigées des variations saisonnières (CVS) et des jours ouvrables (CJO).
+Cela permet aux utilisateurs d'interpréter et de comparer plus facilement les évolutions des séries au cours du temps.
+Les méthodes de désaisonnalisation décomposent les séries chronologiques en trois composantes : la saisonnalité (y compris les effets de calendrier), la tendance-cycle et l'irrégulier.
+Les effets saisonniers représentent les variations régulières dans les données qui se manifestent durant le même mois ou le même trimestre chaque année ;
+la tendance-cycle représente l'estimation conjointe de la tendance de long-terme et des variations, de court-terme, du cycle conjoncturel ; 
+l'irrégulier représente les fluctuations inattendues qui ne font pas partie des composantes précédentes (grèves, conditions météorologiques inhabituelles, erreurs de mesures liées à l'échantillonnage...).
+Par construction, la désaisonnalisation n'élimine donc pas l'effet des évènements irrégulier : lorsque celui-ci est important, il se peut donc que la série CVS-CJO ne soit pas lisse ou soit difficile à analyser.
+
+Le calcul et la publication de la tendance-cycle présente plusieurs avantages pour enrichir l'analyse de la conjoncture économique, notamment une meilleure lecture du cycle conjoncturel classique (également appelé cycle des affaires) et des points de retournement associés^[
+On parle de point de retournement lorsque l'on passe d'une phase de récession (diminutions successives) à une phase d'expansion de l'économie (augmentations successives), ou d'une phase d'expansion à une phase de récession.
+]
+[@imf_qna_2017; @menezes2006timely; @huot1989note; @abs_interpreting_ts_2001]. 
+C'est également la composante à privilégier pour effectuer des prévisions à long-terme. 
+Pourtant, seuls quelques instituts statistiques, comme Statistique Canada ou l'Australian Bureau of Statistics (ABS), diffusent régulièrement cette composante.
+
+L'objectif de cette étude est d'expliquer l'intérêt de publier la composante tendance-cycle et les recommandations pour le faire. 
+Elle présente également les méthodes, basées sur des moyennes mobiles, utilisées par Statistique Canada @picard_matthews_2016 et l'Australian Bureau of Statistics @abs_interpreting_ts_2003. 
+Elle montre comment ces méthodes peuvent être étendues pour : 
+
+1)	Réduire le biais des estimations intermédiaires, notamment autour de points de retournement @jos2024AQLT ; 
+
+2)	Modéliser les points atypiques afin d'éviter qu'ils biaisent l'estimation de la tendance-cycle @AQLT2025robustMA.
+
+
+L'étude s'accompagne d'un package R, `publishTC` (<https://github.com/AQLT/publishTC>), qui facilite la mise en œuvre et la comparaison de ces méthodes. 
+Elle explique également comment mettre en place une production automatique de cette composante, l'appliquant à une dizaine de publications de l'Insee (<https://aqlt.github.io/publishTC.wp/>).
+
+L'ensemble des codes étant disponibles en open source, cette étude est entièrement reproductible.
+
+<!-- La désaisonnalisation élimine les influences identifiables qui agissent de manière régulière et répétée sur les séries, elle n'élimine pas l'incidence d'événements irréguliers. Il se peut donc que la série CVS ne soit pas lisse ou facile à intérpréter lorsque l'effet des événements irréguliers est fort. -->
+
+<!-- La tendance-cycle représente la combinaison de la tendance à long terme et des variations du cycle conjoncturel dans la série. -->
+
+# Qu'est-ce que la tendance-cycle ?
+
+L'hypothèse de base utilisée dans les méthodes de décomposition de séries temporelles est que la série chronologique observée, $y_t$, peut être décomposée en une composante de signal $\mu_t$ et une composante erratique $\varepsilon_t$ (appelée composante irrégulière) :
+$$
+f(y_t)=\mu_t+\varepsilon_t
+$$
+où $f$ désigne une transformation appropriée (généralement logarithmique ou aucune transformation).
+Pour simplifier les notations ultérieures, $y_t$ désignera la série observée transformée.
+La composante de bruit $\varepsilon_t$ est généralement supposée être un bruit blanc.
+En supposant que la série chronologique initiale est désaisonnalisée (ou sans saisonnalité), le signal $\mu_t$ représente la tendance (variations sur une longue période) et le cycle (mouvements cycliques superposés à la tendance à long terme), estimés ici conjointement et appelé tendance-cycle $TC_t$^[
+Lorsque la série contient de la saisonnalité (pas exemple dans le cadre de la désaisonnalisation), la série brute est modélisée comme une combinaison des trois composantes (saisonnalité, tendance-cycle et irrégulier) qui sont estimées simultanément.
+].
+L'estimation de la composante tendance-cycle permet faciliter l'analyse des retournements conjoncturels dans le cycle classique (également appelé cycle des affaires)^[
+On ne cherche donc pas à estimer séparément la tendance et le cycle, associée à des méthodes de filtrage de type Hodrick-Prescott ou Baxter-King, qui sont plutôt utilisées pour analyser les points de retournement dans le cycle de croissance (voir @ferrara2009FR pour une description des différents cycles économiques).
+].
+On parle de point de retournement lorsque l'on passe d'une phase de récession (diminutions successives) à une phase d'expansion de l'économie (augmentations successives) : on parle alors de redressement ou, dans le cas contraire, de ralentissement.
+Même si plusieurs formules peuvent être utilisées pour définir ces phases, la définition de @Zellner1991 est généralement utilisée, dans le cadre de l'estimation de tendance-cycle, pour déterminer les points de retournement : on a un point de retournement à la date $t$ lorsque $TC_{t-3}\geq TC_{t-2}\geq TC_{t-1}<TC_t\leq TC_{t+1}$ (redressement) ou $TC_{t-3}\leq TC_{t-2}\leq TC_{t-1}>TC_t\geq TC_{t+1}$ (ralentissement).  
+
+@picard_matthews_2016
+Les séries temporelles sont généralement considérées comme ayant trois composantes. Soit $y_t$ la série originale. Elle se compose de la tendance-cycle $C_t$ , de la saisonnalité (y compris les effets de calendrier) $S_t$ et de l'irrégularité $I_t$. Comme son nom l'indique, la tendance-cycle est composée de la tendance et du cycle. 
+La tendance est le mouvement à long terme, à la hausse ou à la baisse, observé dans les données sur plusieurs années ou décennies. Le cycle est une séquence de fluctuations douces autour de la tendance à long terme, caractérisée par l'alternance de périodes d'expansion et de contraction. 
+Les deux étant relativement difficiles à distinguer dans la pratique, nous les estimons ensemble sous le nom de tendance-cycle. 
+La saisonnalité correspond aux fluctuations intra-annuelles (mensuelles, trimestrielles) qui se répètent plus ou moins d'une année à l'autre. 
+Nous incluons également les effets de calendrier tels que les jours de bourse et les effets de Pâques. 
+L'irrégularité comprend les fluctuations résiduelles, erratiques, qui ne peuvent être attribuées aux composantes systématiques décrites ci-dessus : la tendance-cycle, la saisonnalité ou l'effet de calendrier.
+
+
+# Pourquoi estimer et publier une tendance-cycle ?
+
+@imf_qna_2017 recommande d'utiliser la tendance-cycle pour l'analyse du cycle conjoncturel, la détection des points d'inflexion et les prévisions à long-terme. Pour les prévisions à court et moyen terme, la série originale ainsi que toutes les composantes sont des composantes d'intérêt.
+
+Pas de consensus sur la question de savoir s'il faut présenter des données CVS ou des estimations de la composante tendance-cycle : @imf_qna_2017 recommandent de faire les deux (mais insiste quand même plus sur la publication des séries CVS).
+
+@menezes2006timely les TC permettent une estimation plus rapide du point de retournement mais avec le risque de détection de faux points de retournement.
+
+@kenny1982local naturellement, plus le MCD est grand, plus il y a un avantage à lisser la série plutôt que d'utiliser directement la série désaisonnalisée (MCD = mesure du besoin de lissage).
+
+@huot1989note l'estimation de la tendance-cycle donne une indication claire de la tendance de long-terme.
+La tendance-cycle est plus lisse mais a des révisions plus grandes que la séries CVS pour les deux dernières estimations.
+L'ampleur des révisions diminue fortement lorsque l'on s'éloigne du lag 0 : à partir du lag 2, les révisions sont plus faibles que celles des séries désaisonnalisées. En d'autres termes, les erreurs d'estimation de la tendance-cycle tendent à être corrigées immédiatement, tandis que les erreurs d'estimation corrigées des variations saisonnières sont reportées sur une période plus longue.
+Les estimations tendance-cycle aux retards 0 et 1 sont considérées comme des estimations préliminaires. Il en va de même pour les estimations corrigées des variations saisonnières.
+Les estimations de la tendance-cycle aux retards 0, 1 et suivants sont plus lisses ou moins irrégulières que les estimations corrigées des variations saisonnières.
+
+
+@abs_interpreting_ts_2001
+Souvent, les utilisateurs sont intéressés par l'analyse de la direction sous-jacente de la série, non masquée par des effets saisonniers ou irréguliers, et par la détection d'éventuels points d'inflexion dans la série. Dans de telles circonstances, la série de tendances serait la plus appropriée à utiliser car tous les effets saisonniers et irréguliers ont été éliminés.
+
+Si la série des tendances fournit des informations utiles sur l'orientation sous-jacente des données, elle ne fournit aucune information sur les tendances saisonnières des données. Certains utilisateurs peuvent être intéressés, par exemple, par l'ampleur relative des pics et des creux saisonniers d'une année à l'autre, ou par l'évolution des effets saisonniers au fil des ans. Dans ce cas, les données originales, dont les effets saisonniers n'ont pas été supprimés, sont les plus appropriées. Les utilisateurs intéressés par la comparaison d'un mois à l'autre peuvent trouver les données corrigées des variations saisonnières plus utiles que les données originales, car elles ne sont pas obscurcies par les tendances saisonnières.
+
+Certains utilisateurs peuvent être intéressés par les mois les plus ou les moins irréguliers, ou par l'évolution de l'irrégularité dans le temps. L'irrégularité étant supprimée de la série tendancielle, l'utilisateur sera intéressé par l'analyse des données corrigées des variations saisonnières. D'autres utilisateurs peuvent être intéressés par la mesure de l'ampleur de l'irrégularité afin de l'aligner sur des événements économiques ou un changement de politique gouvernementale. Par exemple, les utilisateurs peuvent être intéressés par l'ampleur de l'impact de la taxe sur les biens et services sur les chiffres d'affaires du commerce de détail. Là encore, les données corrigées des variations saisonnières sont les plus appropriées.
+
+
+@abs_smoothing_1987 L'objectif n'est pas de remplacer les séries désaisonnalisées mais d'apporter une information supplémentaire qui peut être utile à l'utilisateur.
+
+Révisions concentrées sur 3 mois (t, t-1 et t-2).
+# Comment estimer une tendance-cycle ?
+
+La composante tendance-cycle est généralement estimée de manière locale.
+En effet, autour d'un voisinage $h$ de $t$, cette composante peut être approximée localement par un polynôme de degré $d$\ :
+$$
+TC_{t+i} = \sum_{j=0}^d\beta_j{i}^j+\xi_{t+i}\quad\forall i\in\{-h,-h+1,\dots,t+h\}
+$$
+avec $\xi_t$ un processus stochastique non corrélé avec $\varepsilon_t$ représentant l'erreur d'approximation.
+Même si certains articles modélisent $\xi_t$ et $\varepsilon_t$ séparément [voir par exemple @GrayThomson2002], une hypothèse habituelle, est de rassembler $\xi_t$ et $\varepsilon_t$^[
+Cela revient à supposer que le biais d'approximation de la tendance-cycle par un polynôme local est nul.
+].
+Ainsi, la tendance-cycle $TC_t$ est considérée comme déterministe et modélisée localement comme une tendance polynomiale de degré $d$.
+Les coefficients $(\beta_0,\dots,\beta_d)$ peuvent être estimés par la méthode des moindres carrés pondérés.
+L'estimation $\hat \beta_0$ fournit l'estimation du cycle de tendance $\widehat{TC}_t$ et on peut montrer que cela équivaut à appliquer une moyenne mobile.
+Cette moyenne mobile est généralement symétrique ($\widehat{TC}_t$ est estimée en utilisant autant d'observation avant et après $t$) mais pour l'estimation des derniers points (lorsque l'on ne peut pas utiliser autant d'observations avant et après $t$) il est nécessaire de s'appuyer sur des moyennes mobiles *ad hoc* qui sont asymétriques.
+
+@picard_matthews_2016 CLF ne préserve pas les tendances quadratiques.
+Statistiques Canada fait CLF + coupe et normalise
+
+
+
+# Recommandations de publications
+
+La présentation doit mettre en lumière le moindre degré de fiabilité de la tendance-cycle pour les dernières observations. @imf_qna_2017
+
+@kenny1982local mieux de mettre à jour les séries en continu plutôt qu'une fois par an.
+
+@kenny1982local trois premières estimations fortement révisées (estimation courante, mois précédent, mois n-2)
+
+@kenny1982local prolonger d'un an plus optimal que de 2 ans
+
+
+@abs_time_series_guidelines La composante résiduelle/irrégulière ayant une grande influence sur les mouvements des données désaisonnalisées, le comportement sous-jacent des séries de données est difficile à discerner. C'est pourquoi il convient de mettre l'accent sur les estimations de la tendance dans la section des points clés des publications, plutôt que sur les estimations corrigées des variations saisonnières.
+Les estimations de la tendance sont les séries qu'il est préférable de mettre en avant lorsque l'on discute du comportement des séries temporelles dans les points clés des publications. Les mouvements des séries originales et corrigées des variations saisonnières ne doivent généralement pas être mis en avant dans les points clés.
+
+@abs_time_series_guidelines la TC doit être représentée conjointement avec la série désaisonnalisées.
+Les principaux graphiques doivent présenter des données sur 8 à 10 ans pour que les tendances contemporaines puissent être observées dans le cadre d'un cycle économique.
+Il ne faut pas affirmer avec force l'existence de points d'inflexion tant que quelques estimations de tendances postérieures au point d'inflexion prima facie n'ont pas corroboré son existence.
+
+L'estimation de la tendance est généralement plus fiable que la série corrigée des variations saisonnières dont elle est dérivée. Bien que les dernières estimations de la tendance soient sujettes à révision, elles fournissent néanmoins généralement une indication plus opportune et plus fiable de l'évolution de la tendance finale de la série que l'évolution de la série corrigée des variations saisonnières.
+     
+Même dans le cas de séries chronologiques extrêmement erratiques, les révisions en points de pourcentage de la tendance ne seront généralement pas plus importantes que les révisions annuelles de la série corrigée des variations saisonnières et dureront beaucoup moins longtemps (trois mois ou deux trimestres selon la fréquence).
+
+Il faut effectuer une analyse de sensibilité / de révision
+
+
+Statistique Canada, note sur les graphiques :
+La plus grande variabilité associée aux estimations de la tendance-cycle est indiquée au moyen d'une ligne pointillée dans le graphique pour le mois de référence en cours et pour les trois mois précédents. 
+
+@martin2009issuestc recommandent d'utiliser le ratio irrégulier sur signal (I/C) qui représente le rapport entre la variation absolue moyenne de la composante irrégulière et de la composante tendancielle du cycle
+
+la série corrigée des variations saisonnières doit être représentée par une ligne pleine et la tendance doit être représentée par une ligne pleine plus épaisse avec une partie en pointillés pour refléter l'incertitude relative de la tendance à la fin de la série. La longueur de la partie en pointillés de la ligne est déterminée par le nombre de mois, en moyenne, avant que les mouvements
+de la tendance ne dominent les mouvements irréguliers de la série.
+
+Une préoccupation majeure de certains utilisateurs est que l'utilisation des tendances à un "instantané" peut sembler lisse et stable, mais au fil du temps, au fur et à mesure que les estimations évoluent, les révisions de la tendance peuvent être considérables. La fin de la série est généralement le moment où l'intérêt est le plus fort, et c'est là que la tendance est susceptible d'être la plus vulnérable.
+ 
+ 
+@mclaren_zhang_2010 une critique classique des estimations de la tendance-cycle est qu'elles ne sont pas définies de manière unique et il n'y a pas de définition unique et acceptée
+Kendall (1976), p. 29, "The essential idea of a trend is that it shall be smooth".
+Harvey (1989), p. 284, "There is no fundamental reason why a trend should be smooth".
+Pour surmonter ce problème, ABS utilise une approche standard appliquée à toutes les séries de manière consistente. La série désaisonnalisée où les gros points atypiques osnt supprimés est utilisée et ensuite H13 est utilisé. L'approche est transparente. La disponibilité des estimations corrigées des variations saisonnières permet aux utilisateurs plus sophistiqués, tels que le Trésor et les banques centrales, de construire leurs propres estimations du cycle tendanciel en utilisant leurs méthodes d'estimation ou de filtrage préférées.
+
+Dans la pratique, les analystes se concentrent souvent sur les mouvements d'une période à l'autre des séries corrigées des variations saisonnières. Le problème de cette approche est que les estimations désaisonnalisées comprennent à la fois la tendance et la composante irrégulière. Les mouvements d'une période à l'autre des séries désaisonnalisées sont influencés par le comportement de ces fluctuations irrégulières. Dans de nombreux cas, la composante irrégulière domine le mouvement global des estimations désaisonnalisées. On peut montrer mathématiquement que le mouvement d'une période à l'autre amplifie réellement la composante irrégulière, de sorte que, par exemple, une estimation du mouvement d'un mois à l'autre ou d'un trimestre à l'autre n'est en fait qu'un examen des irrégularités amplifiées.
+
+
+Tendance=cycle : il s'agit de la meilleure mesure de la direction sous-jacente à long terme d'une série. Cette mesure fournit une perspective historique lissée du modèle de comportement sous-jacent sans l'impact des influences liées au calendrier ou irrégulières. Les utilisateurs peuvent se servir de cet indicateur pour surveiller le niveau et la forme des points d'inflexion dans le temps, ce qui peut contribuer à une prise de décision opportune et éclairée.
+Toutefois, il convient d'être prudent lors de l'interprétation des estimations des tendances pour les périodes récentes. Les révisions de la série de tendances à la fin de l'année en cours seront dues à la disponibilité de nouvelles estimations originales, car la direction sous-jacente sera continuellement réévaluée au fur et à mesure que de nouvelles informations seront disponibles. Par exemple, pour confirmer la présence d'un point d'inflexion dans la direction sous-jacente à la fin de la période actuelle, environ trois observations supplémentaires de la tendance seront nécessaires.
+
+En général, les révisions des estimations corrigées des variations saisonnières sont relativement peu importantes mais durent plus longtemps, tandis que les révisions des estimations des tendances-cycles sont relativement plus importantes mais durent moins longtemps
+
+Trois principales raisons de calculer et publier la tendance-cycle :
+1. Réduire le risque que des utilisateurs clés, tels que les médias et les décideurs politiques, tirent des conclusions inappropriées sur la base de mouvements irréguliers (ou bruyants).
+2. Permettre une comparaison appropriée dans le temps en réduisant l'impact des événements ponctuels.
+3. Améliorer la compréhension et la détection des points de retournement.
+
+TC doit être publiée en même temps que la série désaisonnalisée et les deux séries doivent être présentées ensemble dans les graphiques. Cela signifie que le graphique montre l'importance et la direction des facteurs irréguliers présents dans les séries corrigées des variations saisonnières.
+
+Les multiples graphiques linéaires traditionnellement utilisés pour présenter les estimations tendancielles et désaisonnalisées peuvent masquer l'influence de l'irrégularité des estimations désaisonnalisées sur les estimations tendancielles. Cela entrave l'analyse, en particulier en ce qui concerne l'identification des points d'inflexion dans la série. Une approche alternative de la présentation des estimations désaisonnalisées et tendancielles peut être utilisée pour montrer clairement l'impact de l'irrégularité. L'ABS a envisagé d'autres approches de présentation, par exemple un « graphique en forme de sucette » qui présente la tendance et les séries corrigées des variations saisonnières ensemble, mais qui met également l'accent sur le degré d'irrégularité dans les séries corrigées des variations saisonnières.
+Le graphique en sucette met l'accent sur les estimations de la tendance. L'un des avantages de ce type de graphique est qu'il permet de mettre en évidence les points d'inflexion. Si trois valeurs irrégulières apparaissent du même côté de la tendance, cela peut être considéré comme le début possible d'un point d'inflexion et d'un changement de la direction sous-jacente.
+
+En pratique, les INS ont le devoir de fournir aux utilisateurs des estimations et des indicateurs qui leur permettent de prendre des décisions impartiales et éclairées. En termes de résultats analytiques, cela signifie la disponibilité des estimations originales, désaisonnalisées et tendancielles. L'approche consistant à calculer et à publier régulièrement les estimations originales, désaisonnalisées et tendancielles est cruciale pour une prise de décision éclairée, car les différentes estimations présentent des forces et des faiblesses. Dans la pratique, les estimations désaisonnalisées ou originales ne doivent pas être utilisées isolément. Les estimations tendancielles, en tant que sous-produit analytique, sont un outil important pour les utilisateurs et les analystes afin de les aider à prendre des décisions éclairées, car elles réduisent l'impact de la volatilité des estimations originales et corrigées des variations saisonnières. Il est important de noter que ni les séries tendancielles ni les séries désaisonnalisées n'ont intrinsèquement plus de valeur ou d'importance l'une que l'autre, mais qu'elles doivent être utilisées de manière complémentaire, les utilisateurs étant informés de l'utilisation appropriée et des limites de chaque estimation et indicateur.
+
+L'autorité statistique du Royaume-Uni, un organisme indépendant qui surveille l'utilisation des statistiques au Royaume-Uni, a également noté les risques associés à l'accent mis sur les variations d'un mois sur l'autre dans les estimations corrigées des variations saisonnières. Elle a déclaré (UKSA, 2008) que « ... nous pensons que certains utilisateurs se fient trop aux variations d'un mois sur l'autre ; dans une situation très volatile, de telles estimations mensuelles ne sont pas de bons guides pour les tendances à plus long terme ».
+La disponibilité d'informations complémentaires, telles que les estimations des tendances, ainsi que la formation continue et le leadership des INS en matière d'indicateurs appropriés, peuvent contribuer à satisfaire l'exigence selon laquelle les utilisateurs doivent être en mesure de prendre des décisions en connaissance de cause.
+
+
+
+@abs_interpreting_ts_2003
+I/C ratio : Quel que soit le modèle le plus approprié, le paramètre de poids final est une valeur qui reflète la part de la variabilité de la série désaisonnalisée résultant de l'irrégularité par rapport au comportement tendanciel. Une valeur numériquement faible du paramètre de poids final indique que les mouvements de la série d'une période à l'autre sont généralement déterminés par la tendance, tandis qu'une valeur numériquement élevée du paramètre de poids final indique que les fluctuations irrégulières ont tendance à déterminer les changements dans la série désaisonnalisée d'une période à l'autre.
+
+Pour les points atypiques AO extrêmes, une analyse est faite pour savoir si la cause est identifiable et si l'effet de l'irrégulier peut être enlevé.
+
+ Pour corriger la rupture de tendance à des fins de lissage, l'ABS calcule un « facteur de dislocation » indiquant l'ampleur du changement de niveau de la tendance. Ce facteur est ensuite appliqué à la première partie de la série corrigée des variations saisonnières afin d'aligner son niveau sur celui de la deuxième partie de la série. La série désaisonnalisée modifiée qui en résulte est ensuite lissée à l'aide des filtres appropriés pour obtenir une série d'estimations de tendances. Afin que les estimations de tendance reflètent comme il se doit le changement de niveau du sentier de tendance, la première partie de la série de tendance est ensuite ramenée au niveau initial de la série désaisonnalisée sur ces périodes, en divisant les estimations par le même facteur de dislocation.
+
+
+@abs_smoothing_1987
+Toutefois, pour aider les utilisateurs à la fin de la série, l'Australian Bureau of Statistics présente généralement les estimations lissées corrigées des variations saisonnières sous forme de graphiques et de tableaux avec la série corrigée des variations saisonnières. La raison de cette pratique est de permettre aux utilisateurs de discerner l'ampleur relative et la direction des différences résiduelles entre les deux séries, la différence étant une estimation des influences irrégulières actuelles. L'utilisateur est alors en mesure d'opposer ces estimations de l'irrégularité à sa propre connaissance ou à des informations anecdotiques sur les influences erratiques dans l'activité socio-économique actuelle. Si les utilisateurs estiment que l'irrégularité actuelle est plus grande ou plus petite, à la hausse ou à la baisse par rapport à ce que le Bureau a fourni, ils peuvent modifier l'estimation provisoire de la série lissée du Bureau.
+
+Révisions de la série CVS + grandes que celles de la TC mais concentrée sur quelques périodes.
+
+En général, ces indicateurs de tendance sont, à l'exception des deux ou trois dernières estimations actuelles, relativement peu révisés. En règle générale, des conclusions fiables sur le comportement tendanciel peuvent être tirées des séries corrigées des variations saisonnières lissées, à l'exclusion des trois dernières estimations. Les trois dernières estimations sont toujours provisoires et sujettes à la plus grande révision relative. Ces estimations ne doivent donc être utilisées qu'avec beaucoup de prudence et en conjonction avec des informations anecdotiques ou autres si des indicateurs plus opportuns du comportement tendanciel sont nécessaires. Elles ne doivent pas être utilisées seules pour conclure qu'un tournant ou un point d'inflexion vient de se produire dans la série.
+ 
+# Conclusion
+
+
+\clearpage
+
+# Bibliographie {-}
+
+::: {#refs}
+:::
