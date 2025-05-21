@@ -208,7 +208,7 @@ rev_tot <- lapply(series, function(serie) {
         })
     )
     rev_tot_by_method <- rev_tot_by_method[rev_tot_by_method[, "Last date"] != colnames(rev_tot_by_method)[4], -4]
-    rev_tot_by_method[with(rev_tot_by_method, order(Meth,`Last date`, Methods)), ]
+    rev_tot_by_method[with(rev_tot_by_method, order(Meth,-xtfrm(`Last date`), Methods)), ]
 })
 ```
 
