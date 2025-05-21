@@ -86,4 +86,4 @@ plots:
       contribution_of_sa: yes
   extra_info:
     enabled: yes
-    name: Extra informations
+    name: Statistiques générales
