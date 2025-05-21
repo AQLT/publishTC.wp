@@ -6,6 +6,7 @@ files <- sapply(files, function(f) {
         paste0(data$dataset, ".qmd")
     )
 })
+files <- c(files, "report/index.qmd")
 
 library(future)
 plan(multisession)
