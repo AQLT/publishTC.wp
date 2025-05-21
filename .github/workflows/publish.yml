@@ -58,19 +58,19 @@ jobs:
           REPO_KEY: ${{secrets.GITHUB_TOKEN}}
           username: github-actions
 
-    # - name: Render documents
-    #   run: Rscript R/3b-render.R
-    - name: Generate Quarto reports
-      run: |
-        for file in report/*.qmd; do
-          if [[ "$(basename "$file")" != "template.qmd" ]]; then
-          # Afficher le nom du fichier en cours de traitement
-            echo "Rendering file: $(basename "$file") $(date)"
-          # Rendre le fichier avec Quarto
-            quarto render "$file"
-          fi
-        done
-      shell: bash
+    - name: Render documents
+      run: Rscript R/3-render.R
+    # - name: Generate Quarto reports
+    #   run: |
+    #     for file in report/*.qmd; do
+    #       if [[ "$(basename "$file")" != "template.qmd" ]]; then
+    #       # Afficher le nom du fichier en cours de traitement
+    #         echo "Rendering file: $(basename "$file") $(date)"
+    #       # Rendre le fichier avec Quarto
+    #         quarto render "$file"
+    #       fi
+    #     done
+    #   shell: bash
 
     - name: Deploy to gh-pages
       run: |
