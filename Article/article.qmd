@@ -165,6 +165,27 @@ L'ensemble des codes étant disponibles en open source, cette étude est entièr
 
 # Qu'est-ce que la tendance-cycle ?
 
+
+<!-- Dans le cadre de l'analyse des séries temporelles, il est courant de supposer que la série chronologique observée, $y_t$, peut être décomposée en une composante saisonnalité (y.c. effets de calendrier), $S_t$, une composante tendance-cycle, $TC_t$, et une composante erratique $\varepsilon_t$ (appelée composante irrégulière) : -->
+<!-- $$ -->
+<!-- f(y_t)=S_t+TC_t+\varepsilon_t -->
+<!-- $$ -->
+<!-- où $f$ désigne une transformation appropriée (généralement logarithmique ou aucune transformation). -->
+<!-- Pour simplifier les notations ultérieures, $y_t$ désignera la série observée transformée. -->
+
+<!-- La saisonnalité représente les variations régulières dans les données de la série chronologique qui se manifestent durant le même mois ou le même trimestre chaque année. -->
+<!-- Dans le cadre de la désaisonnalisation, on distingue la saisonnalité des effets de calendrier non-saisonniers comme les effets jours ouvrables et les fêtes mobiles. -->
+<!-- La majorité des séries macroéconomiques sont corrigées des variations saisonnières (CVS) et des jours ouvrables (CJO) : les séries CVS-CJO sont donc composées de la tendance-cycle et de l'irrégulier. -->
+<!-- Par simplification dans les écritures, nous supposerons que la  -->
+
+
+<!-- . Comme son nom l'indique, la tendance-cycle est composée de la tendance et du cycle.  -->
+<!-- La tendance est le mouvement à long terme, à la hausse ou à la baisse, observé dans les données sur plusieurs années ou décennies. Le cycle est une séquence de fluctuations douces autour de la tendance à long terme, caractérisée par l'alternance de périodes d'expansion et de contraction.  -->
+<!-- Les deux étant relativement difficiles à distinguer dans la pratique, nous les estimons ensemble sous le nom de tendance-cycle.  -->
+<!-- La saisonnalité correspond aux fluctuations intra-annuelles (mensuelles, trimestrielles) qui se répètent plus ou moins d'une année à l'autre.  -->
+<!-- Nous incluons également les effets de calendrier tels que les jours de bourse et les effets de Pâques.  -->
+<!-- L'irrégularité comprend les fluctuations résiduelles, erratiques, qui ne peuvent être attribuées aux composantes systématiques décrites ci-dessus : la tendance-cycle, la saisonnalité ou l'effet de calendrier. -->
+
 L'hypothèse de base utilisée dans les méthodes de décomposition de séries temporelles est que la série chronologique observée, $y_t$, peut être décomposée en une composante de signal $\mu_t$ et une composante erratique $\varepsilon_t$ (appelée composante irrégulière) :
 $$
 f(y_t)=\mu_t+\varepsilon_t
@@ -175,19 +196,21 @@ La composante de bruit $\varepsilon_t$ est généralement supposée être un bru
 En supposant que la série chronologique initiale est désaisonnalisée (ou sans saisonnalité), le signal $\mu_t$ représente la tendance (variations sur une longue période) et le cycle (mouvements cycliques superposés à la tendance à long terme), estimés ici conjointement et appelé tendance-cycle $TC_t$^[
 Lorsque la série contient de la saisonnalité (pas exemple dans le cadre de la désaisonnalisation), la série brute est modélisée comme une combinaison des trois composantes (saisonnalité, tendance-cycle et irrégulier) qui sont estimées simultanément.
 ].
-L'estimation de la composante tendance-cycle permet faciliter l'analyse des retournements conjoncturels dans le cycle classique (également appelé cycle des affaires)^[
+Par construction, l'estimation de la composante tendance-cycle permet faciliter l'analyse des retournements conjoncturels dans le cycle classique (également appelé cycle des affaires)^[
 On ne cherche donc pas à estimer séparément la tendance et le cycle, associée à des méthodes de filtrage de type Hodrick-Prescott ou Baxter-King, qui sont plutôt utilisées pour analyser les points de retournement dans le cycle de croissance (voir @ferrara2009FR pour une description des différents cycles économiques).
 ].
 On parle de point de retournement lorsque l'on passe d'une phase de récession (diminutions successives) à une phase d'expansion de l'économie (augmentations successives) : on parle alors de redressement ou, dans le cas contraire, de ralentissement.
 Même si plusieurs formules peuvent être utilisées pour définir ces phases, la définition de @Zellner1991 est généralement utilisée, dans le cadre de l'estimation de tendance-cycle, pour déterminer les points de retournement : on a un point de retournement à la date $t$ lorsque $TC_{t-3}\geq TC_{t-2}\geq TC_{t-1}<TC_t\leq TC_{t+1}$ (redressement) ou $TC_{t-3}\leq TC_{t-2}\leq TC_{t-1}>TC_t\geq TC_{t+1}$ (ralentissement).  
 
-@picard_matthews_2016
-Les séries temporelles sont généralement considérées comme ayant trois composantes. Soit $y_t$ la série originale. Elle se compose de la tendance-cycle $C_t$ , de la saisonnalité (y compris les effets de calendrier) $S_t$ et de l'irrégularité $I_t$. Comme son nom l'indique, la tendance-cycle est composée de la tendance et du cycle. 
-La tendance est le mouvement à long terme, à la hausse ou à la baisse, observé dans les données sur plusieurs années ou décennies. Le cycle est une séquence de fluctuations douces autour de la tendance à long terme, caractérisée par l'alternance de périodes d'expansion et de contraction. 
-Les deux étant relativement difficiles à distinguer dans la pratique, nous les estimons ensemble sous le nom de tendance-cycle. 
-La saisonnalité correspond aux fluctuations intra-annuelles (mensuelles, trimestrielles) qui se répètent plus ou moins d'une année à l'autre. 
-Nous incluons également les effets de calendrier tels que les jours de bourse et les effets de Pâques. 
-L'irrégularité comprend les fluctuations résiduelles, erratiques, qui ne peuvent être attribuées aux composantes systématiques décrites ci-dessus : la tendance-cycle, la saisonnalité ou l'effet de calendrier.
+
+
+<!-- @picard_matthews_2016 -->
+<!-- Les séries temporelles sont généralement considérées comme ayant trois composantes. Soit $y_t$ la série originale. Elle se compose de la tendance-cycle $C_t$ , de la saisonnalité (y compris les effets de calendrier) $S_t$ et de l'irrégularité $I_t$. Comme son nom l'indique, la tendance-cycle est composée de la tendance et du cycle.  -->
+<!-- La tendance est le mouvement à long terme, à la hausse ou à la baisse, observé dans les données sur plusieurs années ou décennies. Le cycle est une séquence de fluctuations douces autour de la tendance à long terme, caractérisée par l'alternance de périodes d'expansion et de contraction.  -->
+<!-- Les deux étant relativement difficiles à distinguer dans la pratique, nous les estimons ensemble sous le nom de tendance-cycle.  -->
+<!-- La saisonnalité correspond aux fluctuations intra-annuelles (mensuelles, trimestrielles) qui se répètent plus ou moins d'une année à l'autre.  -->
+<!-- Nous incluons également les effets de calendrier tels que les jours de bourse et les effets de Pâques.  -->
+<!-- L'irrégularité comprend les fluctuations résiduelles, erratiques, qui ne peuvent être attribuées aux composantes systématiques décrites ci-dessus : la tendance-cycle, la saisonnalité ou l'effet de calendrier. -->
 
 
 # Pourquoi estimer et publier une tendance-cycle ?
