@@ -902,11 +902,11 @@
     },
     "publishTC": {
       "Package": "publishTC",
-      "Version": "0.2.0",
+      "Version": "0.2.1",
       "Source": "Repository",
       "Repository": "https://aqlt.r-universe.dev",
       "RemoteUrl": "https://github.com/AQLT/publishTC",
-      "RemoteSha": "cf3d15291d9814215075bb5b82f7d0a06f49e863",
+      "RemoteSha": "53c64516d9f641492e0eab476ac23d086fa97ef9",
       "Requirements": [
         "R",
         "ggplot2",
@@ -915,7 +915,7 @@
         "rjd3x13",
         "zoo"
       ],
-      "Hash": "d0f0c8cb6c58faba7fbc41ef6427414e"
+      "Hash": "ee95e51d02b97681a6c414df701bea5f"
     },
     "purrr": {
       "Package": "purrr",
@@ -985,14 +985,14 @@
     },
     "rjd3filters": {
       "Package": "rjd3filters",
-      "Version": "2.2.0",
+      "Version": "2.3.0.9000",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "rjdverse",
       "RemoteRepo": "rjd3filters",
-      "RemoteRef": "v2.2.0",
-      "RemoteSha": "2a54100a68949fa3690d206af9561e6e971a79b7",
+      "RemoteRef": "develop",
+      "RemoteSha": "596389dfa99499b33bc1c766def70fe2d0e6f07e",
       "Requirements": [
         "MASS",
         "R",
@@ -1002,7 +1002,7 @@
         "rjd3toolkit",
         "stats"
       ],
-      "Hash": "5c4617d8df5cbf2d6dd9c4f1f9454ac0"
+      "Hash": "be02376335e828f6fa67eb46401e2f6e"
     },
     "rjd3toolkit": {
       "Package": "rjd3toolkit",
@@ -1025,21 +1025,21 @@
     },
     "rjd3x13": {
       "Package": "rjd3x13",
-      "Version": "3.3.1",
+      "Version": "3.5.0.9000",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteRepo": "rjd3x13",
       "RemoteUsername": "rjdverse",
-      "RemoteRef": "snapshot",
-      "RemoteSha": "034e5036b7f3d1e473936cc594e37c9a9b3734f3",
+      "RemoteRepo": "rjd3x13",
+      "RemoteRef": "develop",
+      "RemoteSha": "3000c5cb2e37cad6c7db6a1c22f3bcc0cf238ed3",
       "Requirements": [
         "R",
         "RProtoBuf",
         "rJava",
         "rjd3toolkit"
       ],
-      "Hash": "6bf76bedb2f1485ed97099317c734a6f"
+      "Hash": "45f44137a279911295f474d0f44521e9"
     },
     "rlang": {
       "Package": "rlang",
