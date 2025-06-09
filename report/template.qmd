@@ -10,10 +10,16 @@ format:
       - text: Autres publications
         icon: patch-plus
         href: https://aqlt.github.io/publishTC.wp/
+      - text: Document de travail
+        icon: newspaper
+        href: https://aqlt.github.io/publishTC.wp/Article.html
     code-links:
       - text: AQLT/publishTC.wp
         icon: github
         href: https://github.com/AQLT/publishTC.wp
+      - text: Package {publishTC}
+        icon: box
+        href: https://github.com/AQLT/publishTC
 date: today
 date-format: long
 params:
@@ -250,7 +256,7 @@ for (serie in names(all_data[[1]])) {
 			theme_bw() & theme(legend.title = element_blank(), legend.position = "bottom") &
 			# guides(color=guide_legend(nrow=nrow_legend)) &
 			labs(x = NULL, y = NULL) &
-			coord_cartesian(xlim = c(first_date, NA), y = range_y)',
+			coord_cartesian(xlim = c(first_date, NA), y = range_y, default = TRUE)',
 			"```",
 			""
 			), envir = environment(), quiet = TRUE
@@ -282,7 +288,7 @@ for (serie in names(all_data[[1]])) {
 			plot_layout(guides = "collect", axes = "collect") &
 			theme_bw() & theme(legend.title = element_blank(), legend.position = "bottom") &
 			labs(x = NULL, y = NULL) &
-			coord_cartesian(xlim = c(first_date, NA), y = range_y) ',
+			coord_cartesian(xlim = c(first_date, NA), y = range_y, default = TRUE) ',
 			"```",
 			""
 			), envir = environment(), quiet = TRUE
@@ -309,7 +315,7 @@ for (serie in names(all_data[[1]])) {
 			'autoplot(data_comp) +
 			theme_bw() + theme(legend.title = element_blank(), legend.position = "bottom") +
 			labs(x = NULL, y = NULL) +
-			coord_cartesian(xlim = c(first_date, NA), y = range_y) ',
+			coord_cartesian(xlim = c(first_date, NA), y = range_y, default = TRUE) ',
 			"```",
 			""
 		), envir = environment(), quiet = TRUE
@@ -350,7 +356,7 @@ for (serie in names(all_data[[1]])) {
 				'autoplot(round(rev_data_s[[methods]], digits)) +
 			theme_bw() + theme(legend.title = element_blank(), legend.position = "bottom") +
 			labs(x = NULL, y = NULL) +
-			coord_cartesian(xlim = c(first_date, NA), y = range_y)',
+			coord_cartesian(xlim = c(first_date, NA), y = range_y, default = TRUE)',
 			"```",
 			""
 			), envir = environment(), quiet = TRUE

@@ -6,10 +6,17 @@ format:
     number-sections: true
     embed-resources: true
     number-depth: 2
+    other-links:
+      - text: Document de travail
+        icon: newspaper
+        href: https://aqlt.github.io/publishTC.wp/Article.html
     code-links:
       - text: AQLT/publishTC.wp
         icon: github
         href: https://github.com/AQLT/publishTC.wp
+      - text: Package {publishTC}
+        icon: box
+        href: https://github.com/AQLT/publishTC
 date: today
 date-format: long
 params:
