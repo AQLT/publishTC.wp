@@ -176,7 +176,7 @@ for (f in files){
              ),
              extra_info = list(
                  enabled = TRUE,
-                 name = "Extra informations"
+                 name = "Statistiques générales"
              )
         )
 
