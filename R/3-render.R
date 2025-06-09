@@ -1,18 +1,34 @@
 files <- list.files(path = "data", pattern = ".yml")
-files <- sapply(files, function(f) {
+
+# Create report files from template
+qmd_files <- sapply(files, function(f) {
     data <- yaml::read_yaml(file.path("data", f))
-    file.path(
+
+    # Create copy of template file
+    new_template <- file.path(
         "report",
         paste0(data$dataset, ".qmd")
     )
+    file.copy(
+        "report/template.qmd",
+        new_template,
+        overwrite = TRUE
+    )
+    template <- readLines(new_template)
+    i_file <- grep("file:", template)
+    template[i_file] <- gsub("IPI.yml", f, template[i_file])
+    writeLines(template, new_template)
+
+    new_template
 })
-files <- c(files, "report/index.qmd")
+
+qmd_files <- c(qmd_files, "report/index.qmd")
 
 library(future)
 plan(multisession)
 options(future.rng.onMisuse="ignore")
 fs <- list()
-for (f in files){
+for (f in qmd_files){
     print(f)
     fs[[f]] <- future({
         quarto::quarto_render(f,quiet = TRUE)
