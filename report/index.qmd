@@ -38,13 +38,36 @@ language:
 ```{r}
 #| results: asis
 #| echo: false
+#| eval: false
 list_files <- list.files(pattern = "yml$", path = dirname(params$file), full.names = TRUE)
 for (f in list_files) {
     data <- yaml::read_yaml(f)
-    cat(sprintf("\n\n- [%s](%s.html) (%i series)",
+    cat(sprintf("\n\n- [%s](%s.html) (%i séries)",
         data$datasetname,
         data$dataset,
         length(data$series))
     )
 }
 ```
+
+
+
+- [Climats des affaires France](CONJ_FRANCE.html) (2 séries)
+
+- [Enquête de conjoncture dans l'Industrie](CONJ_INDUSTRIE.html) (11 séries)
+
+- [Enquête de conjoncture dans les services](CONJ_SERV.html) (7 séries)
+
+- [Enquête de conjoncture dans le commerce de détail et l'automobile](CONJ_COMD.html) (5 séries)
+
+- [Enquête de conjoncture auprès des ménages](ICAM.html) (13 séries)
+
+- [Consommation mensuelle des ménages en biens](CONSO.html) (16 séries)
+
+- [Nombre de créations d'entreprises](CREATION_ENT.html) (14 séries)
+
+- [Indice de chiffre d'affaires](ICA_ind.html) (5 séries)
+
+- [Indice de production industrielle](IPI.html) (5 séries)
+
+- [Indice de volume des ventes](IVV.html) (4 séries)
