@@ -83,6 +83,9 @@ jobs:
         # Copier uniquement les fichiers HTML du dossier report à la racine
         cp report/*.html .
         [ -f template.html ] && rm template.html
+        # Copie de l'article
+        cp Article/article.html .
+        cp -r Article/article_files .
         git add *.html
         git commit -m "Update reports"
         git fetch origin
