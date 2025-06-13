@@ -1,5 +1,5 @@
 dataset: CONJ_COMD
-datasetname: Enquête mensuelle dans le commerce de détail et l'automobile
+datasetname: Enquête de conjoncture dans le commerce de détail et l'automobile
 series:
   bc_comd:
     idbank: 001580428

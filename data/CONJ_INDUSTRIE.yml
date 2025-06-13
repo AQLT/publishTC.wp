@@ -1,5 +1,5 @@
 dataset: CONJ_INDUSTRIE
-datasetname: Enquête mensuelle de conjoncture dans l'Industrie
+datasetname: Enquête de conjoncture dans l'Industrie
 series:
   bc_cz:
     idbank: 001585934

@@ -1,5 +1,5 @@
 dataset: ICAM
-datasetname: Enquête mensuelle de conjoncture auprès des ménages
+datasetname: Enquête de conjoncture auprès des ménages
 series:
   icam_climat:
     idbank: 001587668
