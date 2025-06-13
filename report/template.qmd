@@ -144,7 +144,7 @@ rev_data <- lapply(basename(list_files), function(f){
     res <- lapply(studied_methods, function(method) {
         read.ts(file.path(dirname(params$file), spec$dataset, method, f), list = TRUE)[series]
     })
-    c(list("Série brute" = lapply(all_data[[tools::file_path_sans_ext(f)]], window, 
+    c(list("Série CVS-CJO" = lapply(all_data[[tools::file_path_sans_ext(f)]], window, 
                                start = min(sapply(spec_series, `[[`, "first_date")))),
       res)
 })
