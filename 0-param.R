@@ -1,57 +1,4 @@
 sheets <- openxlsx::getSheetNames("Data.xlsx")
-sheets <- sheets[1:3]
-# for (s in sheets){
-# 	if (!dir.exists(file.path("data", s)))
-# 		dir.create(file.path("data", s))
-# 	data <- openxlsx::readWorkbook("Data.xlsx",sheet = s)
-# 	data <- data[,2:1]
-# 	if (any(nchar(data$idBank) < 9)) {
-# 		non_complete <- which(nchar(data$idBank) < 9)
-# 		for (i in non_complete) {
-# 			data$idBank[i] <- paste0(
-# 				paste0(rep("0", 9 - nchar(data$idBank[i])), collapse = ""),
-# 				data$idBank[i])
-# 		}
-# 	}
-# 	res <- data$idBank
-# 	names(res) <- data$label
-# 	dput(res,
-# 		 file = file.path("data", s, "0-download_data.R")
-# 	)
-# }
-
-sheets <- openxlsx::getSheetNames("Data.xlsx")
-# Nombre de séries étudiées
-sapply(sheets, function(s){
-    nrow(openxlsx::readWorkbook("Data.xlsx",sheet = s))
-}) |> sum()
-for (s in sheets){
-    if (!dir.exists(file.path("data", s)))
-        dir.create(file.path("data", s))
-    data <- openxlsx::readWorkbook("Data.xlsx",sheet = s)
-    data <- data[,2:1]
-    if (any(nchar(data$idBank) < 9)) {
-        non_complete <- which(nchar(data$idBank) < 9)
-        for (i in non_complete) {
-            data$idBank[i] <- paste0(
-                paste0(rep("0", 9 - nchar(data$idBank[i])), collapse = ""),
-                data$idBank[i])
-        }
-    }
-    res <- data$idBank
-    names(res) <- data$label
-    c(sprintf("dataset: %s", s),
-      "series:",
-      sprintf('  %s: "%s"', data$label, data$idBank)
-    ) |> cat(
-        file = file.path("data", sprintf("%s.yml", s)),
-        sep = "\n"
-    )
-}
-
-## NEW TEMPLATE
-sheets <- openxlsx::getSheetNames("Data.xlsx")
-sheets <- sheets[1:3]
 for (s in sheets){
     if (!dir.exists(file.path("data", s)))
         dir.create(file.path("data", s))
@@ -85,7 +32,6 @@ for (s in sheets){
 }
 
 all_yml <- list.files(path = "data", "yml", full.names = TRUE)
-all_yml <- file.path("data", paste0(c("CONSO", "ENT", "ICAM"), ".yml"))
 for (yml_f in all_yml) {
     print(yml_f)
     yml_data <- yaml::read_yaml(yml_f)
@@ -185,44 +131,3 @@ for (f in files){
         yaml::write_yaml(file = file.path("data", f))
 }
 
-####################
-##### Template #####
-####################
-files <- list.files(path = "data", pattern = ".yml")
-for (f in files){
-    data <- yaml::read_yaml(file.path("data", f))
-    new_template <- file.path(
-        "report",
-        paste0(data$dataset, ".qmd")
-    )
-    file.copy(
-        "report/template.qmd",
-        new_template,
-        overwrite = TRUE
-        )
-    template <- readLines(new_template)
-    i_file <- grep("file:", template)
-    template[i_file] <- gsub("IPI.yml", f, template[i_file])
-    writeLines(template, new_template)
-}
-
-
-files <- list.files(path = "report", pattern = ".qmd", full.names = TRUE)
-files <- grep("template", files, value = TRUE, invert = TRUE)
-
-# for (f in files){
-#     print(f)
-#     quarto::quarto_render(f)
-# }
-
-library(future)
-plan(multisession)
-fs <- list()
-for (f in files){
-    print(f)
-    fs[[f]] <- future({
-        quarto::quarto_render(f,quiet = TRUE)
-    })
-}
-fs <- lapply(fs, FUN = future::value)
-quarto::quarto_render("report/index.qmd")
