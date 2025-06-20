@@ -9,7 +9,7 @@ format:
     other-links:
       - text: Document de travail
         icon: newspaper
-        href: https://aqlt.github.io/publishTC.wp/Article.html
+        href: https://aqlt.github.io/publishTC.wp/article.html
     code-links:
       - text: AQLT/publishTC.wp
         icon: github
