@@ -108,7 +108,9 @@ if (length(grep("robust", studied_methods)) > 0) {
 ```{r}
 #| label: revision-history
 #| eval: !expr spec$plots$revision_history$enabled
-rev_to_table <- function(x) {
+rev_to_table <- function(x, nobs = NULL) {
+    if (!is.null(nobs))
+        x <- tail(x, nobs)
     data_rev <- t(do.call(ts.union, x))
     data_rev <- data_rev[,ncol(data_rev):1] # last date first
     data_rev <- data.frame(
@@ -170,7 +172,10 @@ rm(rev_data_)
 rev_data_fixed <- lapply(series, function(serie) {
     spec_s <- spec$series[[serie]]
     y <- window(all_data[[n]][[serie]], start = spec$series[[serie]]$first_date)
-    vintages <- lapply(all_data[-n], function(vintage){
+    dates <- all_data[-n]
+    if (!is.null (spec$plots$revision_history$table$nobs)) 
+        dates <- tail(dates, spec$plots$revision_history$table$nobs - 1)
+    vintages <- lapply(dates, function(vintage){
         window(y, end = end(vintage[[serie]]))
     })
     lapply(studied_methods, function(method) {
@@ -209,7 +214,7 @@ rev_tot <- lapply(series, function(serie) {
     rev_tot_by_method <- do.call(
         rbind,
         lapply(names(rev_by_method), function(method){
-            rev_meth <- rev_to_table(rev_by_method[[method]])
+            rev_meth <- rev_to_table(rev_by_method[[method]], nobs = spec$plots$revision_history$table$nobs)
             cbind(Meth = method, rev_meth)
         })
     )

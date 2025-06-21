@@ -117,7 +117,8 @@ for (f in files){
                  name = "Analyse des révisions",
                  table = list(
                      enabled = TRUE,
-                     contribution_of_sa = TRUE
+                     contribution_of_sa = TRUE,
+                     nobs = 7,
                  )
              ),
              extra_info = list(
