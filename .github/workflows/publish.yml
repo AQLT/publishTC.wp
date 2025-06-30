@@ -85,9 +85,11 @@ jobs:
         [ -f template.html ] && rm template.html
         # Copie de l'article
         cp Article/article.html .
-        cp -r Article/article_files .
+        cp Article/article.pdf .
+        # cp -r Article/article_files .
         git add *.html
-        git add article_files
+        git add article.pdf
+        # git add article_files
         git commit -m "Update reports"
         git fetch origin
         # Forcer la mise à jour de la branche distante gh-pages
