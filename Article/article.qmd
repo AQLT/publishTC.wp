@@ -6,7 +6,7 @@ format:
     toc-depth: 3
     include-before-body: template/preambule.html
     css: [template/style.css]
-    embed-resources: true
+    embed-resources: false
     # output-file: index
     code-links:
       - text: AQLT/publishTC.wp
@@ -176,7 +176,7 @@ L'ensemble des codes étant librement publié, cette étude est entièrement rep
 
 <!-- La tendance-cycle représente la combinaison de la tendance à long terme et des variations du cycle conjoncturel dans la série. -->
 
-# Qu'est-ce que la composanre tendance-cycle, pourquoi l'estimer et la publier ?
+# Qu'est-ce que la composante tendance-cycle, pourquoi l'estimer et la publier ?
 
 Dans le cadre de l'analyse des séries temporelles, il est courant de supposer que la série chronologique observée, $y_t$, peut être décomposée en une composante saisonnalité (y.c. effets de calendrier), $S_t$, une composante tendance-cycle, $TC_t$, et une composante erratique $\varepsilon_t$ (appelée composante irrégulière) :
 $$
