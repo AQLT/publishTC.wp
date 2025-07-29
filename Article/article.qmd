@@ -1,5 +1,5 @@
 ---
-title: "Et si l'on publiait la tendance-cycle ?"
+title: "Et si l'on publiait la tendance-cycle ?"
 format: 
   html:
     fig-width: 9
@@ -105,7 +105,7 @@ Ces derniers sont appliqués à une dizaine de publications de l'Insee (environ 
 Cette étude est accompagné d'un package R, `publishTC`, permettant de facilement mettre en oeuvre toutes les méthodes et recommandations.
 Elle est également entièrement reproductible et tous les codes utilisés sont disponibles sous <https://github.com/AQLT/publishTC.wp>.
 
-Mots clés : séries temporelles, tendance-cycle, désaisonnalisation, points de retournement.
+Mots clés : séries temporelles, tendance-cycle, désaisonnalisation, points de retournement.
 ::::
 
 
@@ -143,26 +143,26 @@ JEL Classification: C22, E32.
 
 Dans les instituts nationaux de statistiques, il est courant de publier des séries chronologiques corrigées des variations saisonnières (CVS) et des jours ouvrables (CJO).
 Cela permet aux utilisateurs d'interpréter et de comparer plus facilement les évolutions des séries au cours du temps.
-Les méthodes de désaisonnalisation décomposent les séries chronologiques en trois composantes\ : la saisonnalité (y compris les effets de calendrier), la tendance-cycle et l'irrégulier.
-Les effets saisonniers représentent les variations régulières dans les données qui se manifestent durant le même mois ou le même trimestre chaque année ;
-la tendance-cycle représente la tendance de court-terme, c'est-à-dire l'estimation conjointe de la tendance de long-terme et des variations, de court-terme, du cycle conjoncturel ; 
+Les méthodes de désaisonnalisation décomposent les séries chronologiques en trois composantes : la saisonnalité (y compris les effets de calendrier), la tendance-cycle et l'irrégulier.
+Les effets saisonniers représentent les variations régulières dans les données qui se manifestent durant le même mois ou le même trimestre chaque année ;
+la tendance-cycle représente la tendance de court-terme, c'est-à-dire l'estimation conjointe de la tendance de long-terme et des variations, de court-terme, du cycle conjoncturel ; 
 l'irrégulier représente les fluctuations inattendues qui ne font pas partie des composantes précédentes (grèves, conditions météorologiques inhabituelles, erreurs de mesures liées à l'échantillonnage...).
-Par construction, la désaisonnalisation n'élimine donc pas l'effet des évènements irrégulier : lorsque celui-ci est important, il se peut donc que la série CVS-CJO ne soit pas lisse ou soit difficile à analyser.
+Par construction, la désaisonnalisation n'élimine donc pas l'effet des évènements irrégulier : lorsque celui-ci est important, il se peut donc que la série CVS-CJO ne soit pas lisse ou soit difficile à analyser.
 
 Le calcul et la publication de la tendance-cycle présente plusieurs avantages.
 pour enrichir l'analyse de la conjoncture économique, notamment une meilleure lecture du cycle conjoncturel classique (également appelé cycle des affaires) et des points de retournement associés^[
 On parle de point de retournement lorsque l'on passe d'une phase de récession (diminutions successives) à une phase d'expansion de l'économie (augmentations successives), ou d'une phase d'expansion à une phase de récession.
 ]
-[@imf_qna_2017; @menezes2006timely; @huot1989note; @abs_interpreting_ts_2001]. 
+[@imf_qna_2017 ; @menezes2006timely ; @huot1989note ; @abs_interpreting_ts_2001]. 
 En estimant la tendance de court-terme (tendance de long terme plus cycle conjoncturel)
 C'est également la composante à privilégier pour effectuer des prévisions à long-terme. 
 Pourtant, seuls quelques instituts statistiques, comme Statistique Canada ou l'Australian Bureau of Statistics (ABS), diffusent régulièrement cette composante.
 
 Cette étude explique l'intérêt de publier la composante tendance-cycle et les recommandations pour le faire. 
 Elle présente également les méthodes, basées sur des moyennes mobiles, utilisées par Statistique Canada et l'Australian Bureau of Statistics 
-Elle montre comment ces méthodes peuvent être étendues pour : 
+Elle montre comment ces méthodes peuvent être étendues pour : 
 
-1)	Réduire le biais des estimations intermédiaires, notamment autour de points de retournement ; 
+1)	Réduire le biais des estimations intermédiaires, notamment autour de points de retournement ; 
 
 2)	Modéliser les points atypiques afin d'éviter qu'ils biaisent l'estimation de la tendance-cycle.
 
@@ -176,17 +176,17 @@ L'ensemble des codes étant librement publié, cette étude est entièrement rep
 
 <!-- La tendance-cycle représente la combinaison de la tendance à long terme et des variations du cycle conjoncturel dans la série. -->
 
-# Qu'est-ce que la composante tendance-cycle, pourquoi l'estimer et la publier ?
+# Qu'est-ce que la composante tendance-cycle, pourquoi l'estimer et la publier ?
 
-Dans le cadre de l'analyse des séries temporelles, il est courant de supposer que la série chronologique observée, $y_t$, peut être décomposée en une composante saisonnalité (y.c. effets de calendrier), $S_t$, une composante tendance-cycle, $TC_t$, et une composante erratique $\varepsilon_t$ (appelée composante irrégulière) :
+Dans le cadre de l'analyse des séries temporelles, il est courant de supposer que la série chronologique observée, $y_t$, peut être décomposée en une composante saisonnalité (y.c. effets de calendrier), $S_t$, une composante tendance-cycle, $TC_t$, et une composante erratique $\varepsilon_t$ (appelée composante irrégulière) :
 $$
 f(y_t)=S_t+TC_t+\varepsilon_t,
 $$
 où $f$ désigne une transformation appropriée (généralement logarithmique ou aucune transformation).
-Il est courant de publier des séries corrigées des variations saisonnières (CVS) et corrigées des jours ouvrables (CJO) : les séries CVS-CJO sont donc composées de la tendance-cycle et de l'irrégulier.
+Il est courant de publier des séries corrigées des variations saisonnières (CVS) et corrigées des jours ouvrables (CJO) : les séries CVS-CJO sont donc composées de la tendance-cycle et de l'irrégulier.
 Pour simplifier les notations ultérieures, $y_t$ désignera la série observée transformée et, puisque l'on s'intéresse à l'estimation de la tendance-cycle, on considérera la série désaisonnalisée ou sans saisonnalité ($S_t=0$)^[
 Lorsque la série contient de la saisonnalité (pas exemple dans le cadre de la désaisonnalisation), la série brute est modélisée comme une combinaison des trois composantes (saisonnalité, tendance-cycle et irrégulier) qui sont estimées simultanément.
-] :
+] :
 $$
 y_t=TC_t+\varepsilon_t.
 $$
@@ -196,11 +196,11 @@ Par construction, l'estimation de la composante tendance-cycle permet faciliter 
 On ne cherche donc pas à estimer séparément la tendance et le cycle, associée à des méthodes de filtrage de type Hodrick-Prescott ou Baxter-King, qui sont plutôt utilisées pour analyser les points de retournement dans le cycle de croissance (voir @ferrara2009FR pour une description des différents cycles économiques).
 Par ailleurs, les méthodes de décomposition entre tendance et cycle nécessitent d'avoir des séries longues alors que les méthodes de lissages peuvent être appliquées sur des séries courtes.
 ].
-On parle de point de retournement lorsque l'on passe d'une phase de récession (diminutions successives) à une phase d'expansion de l'économie (augmentations successives) : on parle alors de redressement ou, dans le cas contraire, de ralentissement.
-Même si plusieurs formules peuvent être utilisées pour définir ces phases, la définition de @Zellner1991 est généralement utilisée, dans le cadre de l'estimation de tendance-cycle, pour déterminer les points de retournement : il y a un point de retournement à la date $t$ lorsque $TC_{t-3}\geq TC_{t-2}\geq TC_{t-1}<TC_t\leq TC_{t+1}$ (redressement) ou $TC_{t-3}\leq TC_{t-2}\leq TC_{t-1}>TC_t\geq TC_{t+1}$ (ralentissement). 
+On parle de point de retournement lorsque l'on passe d'une phase de récession (diminutions successives) à une phase d'expansion de l'économie (augmentations successives) : on parle alors de redressement ou, dans le cas contraire, de ralentissement.
+Même si plusieurs formules peuvent être utilisées pour définir ces phases, la définition de @Zellner1991 est généralement utilisée, dans le cadre de l'estimation de tendance-cycle, pour déterminer les points de retournement : il y a un point de retournement à la date $t$ lorsque $TC_{t-3}\geq TC_{t-2}\geq TC_{t-1}<TC_t\leq TC_{t+1}$ (redressement) ou $TC_{t-3}\leq TC_{t-2}\leq TC_{t-1}>TC_t\geq TC_{t+1}$ (ralentissement). 
 
 La majorité des instituts nationaux de statistique publient des séries CVS-CJO et c'est cette série qui est utilisée pour effectuer de l'analyse conjoncturelle et structurelle, effectuer des prévisions, étudier les points de retournement, etc.
-Toutefois, lorsque l'irrégulier est important, sa présence peut perturber l'analyse dans certains cas d'usage (comme l'analyse de la direction sous-jacente de la série ou la détection de points de retournements) : l'étude de la tendance-cycle parait alors plus appropriée car tous les effets saisonniers et irréguliers sont éliminés de la série originale.
+Toutefois, lorsque l'irrégulier est important, sa présence peut perturber l'analyse dans certains cas d'usage (comme l'analyse de la direction sous-jacente de la série ou la détection de points de retournements) : l'étude de la tendance-cycle parait alors plus appropriée car tous les effets saisonniers et irréguliers sont éliminés de la série originale.
 L'Autorité statistique du Royaume-Uni (United Kingdom Statistics Authority) considérait par exemple que les utilisateurs de l'indice de ventes au détail accordaient trop d'importances aux variations mensuelles de la série CVS-CJO car en période de forte volatilité cela ne donnait pas une bonne indication de la tendance de long terme [@UKSA2008].
 
 
@@ -228,12 +228,12 @@ autoplot(h13_tppre, xlim = c(2021.1, 2024.7),
 Comme le montre cet exemple, il y a donc un intérêt à publier la tendance-cycle, en complément et non en remplacer des séries CVS-CJO, pour enrichir l'analyse de la conjoncture économique.
 Ainsi, la composante tendance-cycle est à privilégier pour l'analyse du cycle conjoncturel, la détection des points de retournements et les prévisions à long-terme [@imf_qna_2017].
 En particulier, par rapport à la série CVS-CJO, la tendance-cycle permet une estimation plus rapide du point de retournement mais avec le risque de détecter des faux points de retournement [@menezes2006timely].
-Naturellement, l'intérêt de publier la tendance-cycle sera d'autant plus grand que la série est bruitée (i.e. : l'irrégulier est important).
+Naturellement, l'intérêt de publier la tendance-cycle sera d'autant plus grand que la série est bruitée (i.e. : l'irrégulier est important).
 
 Pour la prévision de court terme, la série désaisonnalisée peut être privilégiée, notamment si l'analyse de l'irrégulier est importante [@abs_interpreting_ts_2001]. 
 C'est notamment le cas lorsque les évolutions de la composante irrégulières peuvent être associées à des évènements économiques ou des mesures politiques et a donc un intérêt pour le conjoncturiste.
 
-En somme, comme notamment indiqué par @mclaren_zhang_2010, les trois principales raisons de calculer et publier la tendance-cycle, en plus de la série désaisonnalisée, sont :
+En somme, comme notamment indiqué par @mclaren_zhang_2010, les trois principales raisons de calculer et publier la tendance-cycle, en plus de la série désaisonnalisée, sont :
 
 1. Réduire le risque que les utilisateurs tirent des conclusions inappropriées sur la base de mouvements liés à l'irrégulier.
 
@@ -246,7 +246,7 @@ En somme, comme notamment indiqué par @mclaren_zhang_2010, les trois principale
 
 <!-- @imf_qna_2017 recommande d'utiliser la tendance-cycle pour l'analyse du cycle conjoncturel, la détection des points des retournements et les prévisions à long-terme. Pour les prévisions à court et moyen terme, la série originale ainsi que toutes les composantes sont des composantes d'intérêt. -->
 
-<!-- Pas de consensus sur la question de savoir s'il faut présenter des données CVS ou des estimations de la composante tendance-cycle : @imf_qna_2017 recommandent de faire les deux (mais insiste quand même plus sur la publication des séries CVS). -->
+<!-- Pas de consensus sur la question de savoir s'il faut présenter des données CVS ou des estimations de la composante tendance-cycle : @imf_qna_2017 recommandent de faire les deux (mais insiste quand même plus sur la publication des séries CVS). -->
 
 <!-- @menezes2006timely les TC permettent une estimation plus rapide du point de retournement mais avec le risque de détection de faux points de retournement. -->
 
@@ -260,12 +260,12 @@ En somme, comme notamment indiqué par @mclaren_zhang_2010, les trois principale
 
 
 
-# Comment estimer une tendance-cycle ? {#sec-est-tc}
+# Comment estimer une tendance-cycle ? {#sec-est-tc}
 
 Il existe de très nombreuses façons de modéliser et d'estimer la tendance-cycle, voir notamment @alexandrov2012TEreview pour une revue des méthodes.
 Toutefois, les seuls instituts statistiques qui diffusent régulière cette composante (Statistique Canada et l'Australian Bureau of Statistics (ABS)), utilisent des moyennes mobiles avec une méthodologie similaire à celle utilisée dans la méthode de désaisonnalisation X-13ARIMA-SEATS.
 
-Une *moyenne mobile* $M_{\boldsymbol\theta}$ est un opérateur linéaire défini par un ensemble de coefficients $\boldsymbol \theta=(\theta_{-p},\dots,\theta_{f})'$ qui transforme toute série temporelle $X_t$ en :
+Une *moyenne mobile* $M_{\boldsymbol\theta}$ est un opérateur linéaire défini par un ensemble de coefficients $\boldsymbol \theta=(\theta_{-p},\dots,\theta_{f})'$ qui transforme toute série temporelle $X_t$ en :
 $$
 M_{\boldsymbol\theta}(X_t)=\sum_{k=-p}^{+f}\theta_kX_{t+k}.
 $$
@@ -279,7 +279,7 @@ Dans cette section nous décrivons les moyennes mobiles utilisées par Statistiq
 Voir notamment @inseeDTM202401 pour une description plus complète des méthodes récentes de construction de moyennes mobiles pour l'estimation de la tendance-cycle.
  
 Dans le cadre de l'estimation par moyenne mobile, la composante tendance-cycle est estimée de manière locale.
-Autour d'un voisinage $h$ de $t$, cette composante peut être approximée localement par un polynôme de degré $d$\ :
+Autour d'un voisinage $h$ de $t$, cette composante peut être approximée localement par un polynôme de degré $d$ :
 $$
 TC_{t+i} = \sum_{j=0}^d\beta_j{i}^j+\xi_{t+i}\quad\forall i\in\{-h,-h+1,\dots,t+h\}
 $$
@@ -297,14 +297,14 @@ Cette moyenne mobile est généralement symétrique ($\widehat{TC}_t$ est estim�
 Pour l’extraction de la tendance-cycle, le moyenne symétrique la plus connue est celle de @henderson1916note. 
 Elle est notamment utilisée dans l'algorithme de désaisonnalisation X-13ARIMA-SEATS.
 C'est également la moyenne mobile utilisée par ABS pour obtenir l'estimation finale de la tendance-cycle [@abs_interpreting_ts_2003].
-Notons $h$ la fenêtre de la moyenne mobile d'Henderson, c'est-à-dire que pour estimer la tendance-cycle à la date $t$ ($h$ points avant et après $t$ sont utilisés) : la longueur de la moyenne mobile est donc $2h+1$. 
-Les coefficients de la moyenne mobile d'Henderson d'ordre $h$ sont donnés par :
+Notons $h$ la fenêtre de la moyenne mobile d'Henderson, c'est-à-dire que pour estimer la tendance-cycle à la date $t$ ($h$ points avant et après $t$ sont utilisés) : la longueur de la moyenne mobile est donc $2h+1$. 
+Les coefficients de la moyenne mobile d'Henderson d'ordre $h$ sont donnés par :
 $$
 \theta^H_{k} = \frac{315\left\lbrack \left( n - 1 \right)^{2} - k^{2} \right\rbrack\left\lbrack n^{2} - k^{2} \right\rbrack\left\lbrack \left( n + 1 \right)^{2} - k^{2} \right\rbrack\left\lbrack {3n}^{2} - 16 - 11k^{2} \right\rbrack}{8n\left( n^{2} - 1 \right)\left( {4n}^{2} - 1 \right)\left( {4n}^{2} - 9 \right)\left( 4n^{2} - 25 \right)}
 \text{ avec }n=h+2.
 $$
 
-Comme montré par @proietti2008, celle-ci peut-être obtenue en modélisant localement une tendance de degré 2 ($d=2$) et en utilisant les noyaux\ :
+Comme montré par @proietti2008, celle-ci peut-être obtenue en modélisant localement une tendance de degré 2 ($d=2$) et en utilisant les noyaux :
 $$
 \kappa_{j}=\left[1-\frac{j^2}{(h+1)^2}\right]
 \left[1-\frac{j^2}{(h+2)^2}\right]
@@ -312,41 +312,41 @@ $$
 $$
 Cette moyenne mobile étant symétrique et préservant les tendances de degré 2, elle préserve également les tendances de degré 3 et peut, de manière équivalente, être obtenue en modélisant localement une tendance de degré 3 ($d=3$).
 
-Dans X-13-ARIMA-SEATS, permettant de désaisonnaliser des séries qui sont au plus mensuelles, la longueur de la moyenne mobile (i.e. : le paramètre $h$ déterminant le nombre de points utilisés pour l'estimation de la tendance-cycle) est déterminée à partir de l'I/C ratio, noté $R$, défini par :
+Dans X-13-ARIMA-SEATS, permettant de désaisonnaliser des séries qui sont au plus mensuelles, la longueur de la moyenne mobile (i.e. : le paramètre $h$ déterminant le nombre de points utilisés pour l'estimation de la tendance-cycle) est déterminée à partir de l'I/C ratio, noté $R$, défini par :
 $$
 R=\frac{\bar{I}}{\bar{C}}=\frac{\sum\lvert I_t-I_{t-1}\rvert}{\sum\lvert TC_t-TC_{t-1}\rvert},
 $$
 où $I_t$ est l'irrégulier et $TC_t$ la tendance-cycle.
-Le calcul de ce ratio nécessite de disposer d'une estimation de la tendance-cycle : en notant $s$ la fréquence de la série ($s=12$ pour une série mensuelle, $s=4$ pour une série trimestrielle...), une première estimation de la tendance-cycle est effectuée à partir d'une moyenne mobile de Henderson de longueur $s+1$ (13 termes pour une série mensuelle donc $h=6$, 5 termes pour série trimestrielle donc$h=2$...).
-La longueur retenue par X-13-ARIMA-SEATS est ensuite déterminée en fonction de la valeur du ratio $R$ et de la fréquence de la série\ :
+Le calcul de ce ratio nécessite de disposer d'une estimation de la tendance-cycle : en notant $s$ la fréquence de la série ($s=12$ pour une série mensuelle, $s=4$ pour une série trimestrielle...), une première estimation de la tendance-cycle est effectuée à partir d'une moyenne mobile de Henderson de longueur $s+1$ (13 termes pour une série mensuelle donc $h=6$, 5 termes pour série trimestrielle donc$h=2$...).
+La longueur retenue par X-13-ARIMA-SEATS est ensuite déterminée en fonction de la valeur du ratio $R$ et de la fréquence de la série :
 
-- Pour les séries trimestrielles ($s=4$), la moyenne mobile de Henderson est de 5 termes si le ratio est petit ($R<3,5/3$, majorité des cas) et de 7 termes sinon ;
+- Pour les séries trimestrielles ($s=4$), la moyenne mobile de Henderson est de 5 termes si le ratio est petit ($R<3,5/3$, majorité des cas) et de 7 termes sinon ;
 
 - Pour les séries mensuelles ($s=12$), la moyenne mobile de Henderson est de 9 termes si le ratio est petit ($R<1$), 23 termes si le ratio est grand ($3,5<R$) et 13 termes sinon (majorité des cas).
 
 <!-- @abs_interpreting_ts_2003 -->
-<!-- I/C ratio : Quel que soit le modèle le plus approprié, le paramètre de poids final est une valeur qui reflète la part de la variabilité de la série désaisonnalisée résultant de l'irrégularité par rapport au comportement tendanciel. Une valeur numériquement faible du paramètre de poids final indique que les mouvements de la série d'une période à l'autre sont généralement déterminés par la tendance, tandis qu'une valeur numériquement élevée du paramètre de poids final indique que les fluctuations irrégulières ont tendance à déterminer les changements dans la série désaisonnalisée d'une période à l'autre. -->
+<!-- I/C ratio : Quel que soit le modèle le plus approprié, le paramètre de poids final est une valeur qui reflète la part de la variabilité de la série désaisonnalisée résultant de l'irrégularité par rapport au comportement tendanciel. Une valeur numériquement faible du paramètre de poids final indique que les mouvements de la série d'une période à l'autre sont généralement déterminés par la tendance, tandis qu'une valeur numériquement élevée du paramètre de poids final indique que les fluctuations irrégulières ont tendance à déterminer les changements dans la série désaisonnalisée d'une période à l'autre. -->
 
 Pour l'estimation en temps réel, les moyennes mobiles utilisées dans X-13-ARIMA-SEATS sont celle de @musgrave1964set.
-Comme montré par @proietti2008, ces moyennes mobiles peuvent également s'obtenir par approximation polynomiale locale en supposant en fin de période que la tendance-cycle est linéaire ($d=1$) \ :
+Comme montré par @proietti2008, ces moyennes mobiles peuvent également s'obtenir par approximation polynomiale locale en supposant en fin de période que la tendance-cycle est linéaire ($d=1$) :
 $$
 y_t=\beta_0+\delta t+\varepsilon_t, \quad\varepsilon_t\sim \mathcal N(0,\sigma^2).
 $$
-Les coefficients de la moyenne mobile de Musgrave sont alors obtenus en faisant un compromis biais-variance : la moyenne mobile asymétrique minimise l'erreur quadratique moyenne de révision (au filtre symétrique de Henderson), sous la contrainte de préserve sans biais les constantes (il y a donc un biais dans l'estimation de la pente).
+Les coefficients de la moyenne mobile de Musgrave sont alors obtenus en faisant un compromis biais-variance : la moyenne mobile asymétrique minimise l'erreur quadratique moyenne de révision (au filtre symétrique de Henderson), sous la contrainte de préserve sans biais les constantes (il y a donc un biais dans l'estimation de la pente).
 Ces moyennes mobiles dépendent du rapport $|\delta/\sigma|$ qui doit être défini par l'utilisateur.
-En supposant le biais $\delta$ constant dans le temps et la tendance est linéaire, ce rapport peut être relié à l'I/C ratio $R$ par la relation :
+En supposant le biais $\delta$ constant dans le temps et la tendance est linéaire, ce rapport peut être relié à l'I/C ratio $R$ par la relation :
 $$
 \left|\frac{\delta}{\sigma}\right|=\frac{2}{R\sqrt{\pi}}.
 $$
-Dans X-13-ARIMA-SEATS, pour la construction des moyennes mobiles de Musgrave, ce rapport est fixé de la façon suivante :
+Dans X-13-ARIMA-SEATS, pour la construction des moyennes mobiles de Musgrave, ce rapport est fixé de la façon suivante :
 
-- Pour les séries trimestrielles : $R=0,001$ si une moyenne mobile de Henderson de 5 termes est utilisée (majorité des cas) et $R=4,5$ sinon ;
+- Pour les séries trimestrielles : $R=0,001$ si une moyenne mobile de Henderson de 5 termes est utilisée (majorité des cas) et $R=4,5$ sinon ;
 
-- Pour les séries mensuelles : $R=0,001$ si une moyenne mobile de Henderson de 9 termes est utilisée, $R=3,5$ pour une moyenne mobile de 13 termes (majorité des cas) et $R=4,5$ sinon.
+- Pour les séries mensuelles : $R=0,001$ si une moyenne mobile de Henderson de 9 termes est utilisée, $R=3,5$ pour une moyenne mobile de 13 termes (majorité des cas) et $R=4,5$ sinon.
 
 Pour l'estimation de la tendance-cycle, l'Australian Bureau of Statistics reproduit l'approche de X-13ARIMA-SEATS mais sans faire de détection automatique de la longueur de la série.
 Pour les séries mensuelles, une moyenne mobile de Henderson de 13 termes est toujours utilisée et les moyennes mobiles de Musgrave associées sont construites en utilisant le paramètre $R=3,5$ [@abs2003].
-Cela a un avantage de simplicité : les mêmes moyennes mobiles sont utilisées pour l'ensemble des séries.
+Cela a un avantage de simplicité : les mêmes moyennes mobiles sont utilisées pour l'ensemble des séries.
 Les coefficients des moyennes mobiles utilisées par ABS sont résumés dans la @tbl-hend-coef.
 
 ```{r}
@@ -368,7 +368,7 @@ Pour l'estimation en temps réel, supposer le biais constant et la tendance lin�
 Par exemple, lors d'un retournement conjoncturel, la pente de la tendance-cycle tend vers 0 jusqu'au point de retournement.
 Ainsi @jos2024AQLT propose une méthode de paramétrisation locale des moyennes mobiles de Musgrave, implémentée dans `publishTC::henderson_smoothing()` en utilisant le paramètre `local_icr = TRUE`.
 Cela permet de réduire les révisions et le délai dans la détection des points de retournement, sans changer les estimations finales de la tendance-cycle (toujours estimées via une moyenne mobile de Henderson).
-À titre illustratif, prenant le cas extrême d'une tendance constante de degré 1 sans bruit : l'I/C ratio devrait donc être nul.
+À titre illustratif, prenant le cas extrême d'une tendance constante de degré 1 sans bruit : l'I/C ratio devrait donc être nul.
 L'utilisation du paramètre $R=3,5$ conduit à des révisions dans les estimations en temps réel de la tendance-cycle alors que la paramétrisation locale permet d'obtenir des estimations en temps-réel égales aux estimations finales (@fig-ex-td1).
 
 
@@ -410,9 +410,9 @@ Cela peut avoir pour conséquence l'introduction d'ondulations indésirables^[
 On parle d'ondulation indésirable lorsque deux points de retournement se produisent en moins de dix mois. 
 ], c'est-à-dire la détection de faux points de retournement.
 Ce problème est réduit par la correction des points atypiques (ces cycles étant considérés comme de l'irrégulier). 
-C'est ainsi que le *Nonlinear Dagum Filter* (NLDF) a été développé et consiste à :
+C'est ainsi que le *Nonlinear Dagum Filter* (NLDF) a été développé et consiste à :
 
-1. appliquer l'algorithme de correction des points atypiques de X-11 sur la série désaisonnalisée, puis la prolonger par un modèle ARIMA ;
+1. appliquer l'algorithme de correction des points atypiques de X-11 sur la série désaisonnalisée, puis la prolonger par un modèle ARIMA ;
     
 2. effectuer une nouvelle correction des points atypiques en utilisant un seuil bien plus strict et appliquer ensuite le filtre symétrique de 13 termes. 
     En supposant une distribution normale cela revient à modifier 48 % des valeurs de l'irrégulier (afin d'éviter qu'ils ne biaisent l'estimation de la tendance-cycle).   
@@ -422,11 +422,11 @@ Les *cascade linear filter* [CLF, @clf], correspondent à une approximation des 
 De manière similaire, des moyennes mobiles asymétriques, *Asymmetric Linear Filter* (ALF), peuvent être construites.
     
 C'est la moyenne mobile CLF qui est utilisée par Statistique Canada pour l'estimation de la tendance-cycle [@picard_matthews_2016].
-Pour l'estimation en temps réel, Statistique Canada utilise la méthode «\ couper-et-normaliser\ » qui consiste à recalculer les poids, à partir de la moyenne mobile symétrique, en n'utilisant que les poids associées aux observations disponibles (couper) et en renormalisant pour que la somme des coefficients soit égale à 1 (normaliser).
+Pour l'estimation en temps réel, Statistique Canada utilise la méthode « couper-et-normaliser » qui consiste à recalculer les poids, à partir de la moyenne mobile symétrique, en n'utilisant que les poids associées aux observations disponibles (couper) et en renormalisant pour que la somme des coefficients soit égale à 1 (normaliser).
 Les coefficients des moyennes mobiles utilisées par Statistique Canada sont résumés dans la @tbl-clf-coef.
 
 ```{r}
-#| tbl-cap: "Coefficients des moyennes mobiles utilisées par Statistique Canada pour l'estimation de la tendance-cycle (CLF et méthode «\ couper-et-normaliser\ »), $q=0$ étant la moyenne mobile asymétrique utilisée en temps-réel (0 point dans le futur connu) et $q=6$ la moyenne mobile finale (lorsqu'au moins 6 points dans le futur sont connus)."
+#| tbl-cap: "Coefficients des moyennes mobiles utilisées par Statistique Canada pour l'estimation de la tendance-cycle (CLF et méthode « couper-et-normaliser »), $q=0$ étant la moyenne mobile asymétrique utilisée en temps-réel (0 point dans le futur connu) et $q=6$ la moyenne mobile finale (lorsqu'au moins 6 points dans le futur sont connus)."
 #| label: tbl-clf-coef
 knitr::kable(
     as.matrix(publishTC::CLF_CN, zero_as_na = TRUE), 
@@ -441,19 +441,19 @@ L'inconvénient de la moyenne mobile CLF est qu'elle ne préserve localement que
 Même si la moyenne mobile CLF permet de réduire le nombre d'ondulations indésirables et les révisions dans les estimations intermédiaires, c'est au coût d'un biais plus important dans l'approximation d'une tendance de degré 1.
 
 Cette méthode d'estimation de la tendance-cycle peut être appliquée en utilisant la fonction `publishTC::clf_smoothing()`.
-Par défaut, pour les moyennes mobiles asymétriques, la méthode «\ couper-et-normaliser\ » est utilisée. 
+Par défaut, pour les moyennes mobiles asymétriques, la méthode « couper-et-normaliser » est utilisée. 
 Les moyennes mobiles ALF peuvent être utilisées en utilisant l'option `endpoints = "ALF"`.
 
 
-## Que faire en cas de rupture de tendance ?
+## Que faire en cas de rupture de tendance ?
 
-Lors de périodes de fortes «\ turbulences\ » (comme la crise du COVID-19) où les points atypiques sont importants, les estimations directes de la tendance-cycle peuvent être biaisées.
+Lors de périodes de fortes « turbulences » (comme la crise du COVID-19) où les points atypiques sont importants, les estimations directes de la tendance-cycle peuvent être biaisées.
 De la même façon, lorsqu'une rupture brutale de la tendance est observée, les estimations de la tendance-cycle seront biaisées.
-Dans ce cas, plusieurs approches sont possibles :
+Dans ce cas, plusieurs approches sont possibles :
 
-- Ne pas publier les estimations pendant cette période : c'est ce qui est fait par l'Australian Bureau of Statistics pour la période du COVID-19 en ne publiant pas d'estimation tendance-cycle entre avril 2020 et mars 2022.
+- Ne pas publier les estimations pendant cette période : c'est ce qui est fait par l'Australian Bureau of Statistics pour la période du COVID-19 en ne publiant pas d'estimation tendance-cycle entre avril 2020 et mars 2022.
 
-- Estimer les points atypiques avec un modèle RegARIMA, estimer la tendance-cycle sur la série corrigée et «\ réintroduire\ » les effets corrigés sur la tendance-cycle. 
+- Estimer les points atypiques avec un modèle RegARIMA, estimer la tendance-cycle sur la série corrigée et « réintroduire » les effets corrigés sur la tendance-cycle. 
 L'inconvénient de cette approche est que l'estimation des points atypiques dépend du modèle ARIMA utilisé et de la période d'estimation, ce qui complexifie la reproductibilité des résultats.
 Si le modèle est réestimé à chaque nouvelle observation, la tendance-cycle peut donc potentiellement être révisée pendant de nombreuses périodes.
 Par exemple, @JMS2018DL montrent que dans la majorité des cas il faut attendre au moins 3 ans pour que l'estimation du coefficient associé à une rupture converge.
@@ -468,19 +468,19 @@ C'est l'approche privilégiée par Statistique Canada pendant le COVID-19 [@matt
 
 - Une dernière approche consiste à construire des moyennes mobiles qui prennent en compte la présence d'un choc modélisé par l'utilisateur.
 Dans le cadre des moyennes mobiles de Henderson et de Musgrave, cela revient à ajouter un régresseur supplémentaire dans la régression et dans le cadre de la moyenne mobile CLF, cela revient à ajouter ce régresseur dans la modélisation ARIMA.
-C'est l'approche proposé par @AQLT2025robustMA pour les moyennes mobiles de Henderson et de Musgrave : on parlera alors de «\ Henderson robuste\ » ou de «\ Musgrave robuste\ ».
-Elle est implémentée dans la fonction `publishTC::henderson_robust_smoothing()` où :
+C'est l'approche proposé par @AQLT2025robustMA pour les moyennes mobiles de Henderson et de Musgrave : on parlera alors de « Henderson robuste » ou de « Musgrave robuste ».
+Elle est implémentée dans la fonction `publishTC::henderson_robust_smoothing()` où :
 
-    - Le paramètre `ao` permet de spécifier les dates des points atypiques additifs (AO, *additive outlier*) : un choc ponctuelle à une date particulière puis un retour à la normal (grève, mesure exceptionnelle, erreur de mesure par exemple liée à de la non réponse, etc.).
+    - Le paramètre `ao` permet de spécifier les dates des points atypiques additifs (AO, *additive outlier*) : un choc ponctuelle à une date particulière puis un retour à la normal (grève, mesure exceptionnelle, erreur de mesure par exemple liée à de la non réponse, etc.).
     Le choc affecte donc l'irrégulier et ne devrait pas avoir d'impact sur la tendance-cycle.
 
-    - Le paramètre `ls` permet de spécifier les dates des ruptures en niveau (LS, *level shift*)\ : un changement soudain et durable du niveau moyen de la série (choc structurel, changement de politique économique, etc.).
+    - Le paramètre `ls` permet de spécifier les dates des ruptures en niveau (LS, *level shift*) : un changement soudain et durable du niveau moyen de la série (choc structurel, changement de politique économique, etc.).
     Le choc affecte donc la tendance-cycle et ne devrait pas avoir d'impact sur l'irrégulier.
 
 
-C'est cette dernière approche que nous recommandons de faire : comme montré dans @AQLT2025robustMA, cela permet de minimiser les révisions dans les estimations intermédiaires, de correctement modéliser les retournements conjoncturels et de mieux contrôler les corrections faites.
+C'est cette dernière approche que nous recommandons de faire : comme montré dans @AQLT2025robustMA, cela permet de minimiser les révisions dans les estimations intermédiaires, de correctement modéliser les retournements conjoncturels et de mieux contrôler les corrections faites.
 Cette approche facilite également la reproductibilité des estimations puisqu'il suffit de communiquer sur les ruptures modélisés.
-Comme toutes les approches, la construction des moyennes mobiles «\ robustes\ » nécessite de connaître la date et la nature du choc : sans information extérieur, la détection des chocs peut se faire via des modules ad-hoc comme le module de pré-ajustement de X-13ARIMA-SEATS basé sur la modélisation ARIMA.
+Comme toutes les approches, la construction des moyennes mobiles « robustes » nécessite de connaître la date et la nature du choc : sans information extérieur, la détection des chocs peut se faire via des modules ad-hoc comme le module de pré-ajustement de X-13ARIMA-SEATS basé sur la modélisation ARIMA.
 C'est ce qui est implémenté dans la fonction `publishTC::x13_regarima_outliers()`.
 Puisque cela a un impact important sur la série publiée, il est préférable de confronter les choix d'algorithmes automatiques aux connaissances économiques de la série.
 
@@ -488,7 +488,7 @@ La @fig-ex-simulchoc montre les estimations de la tendance-cycle sur des séries
 Autour du choc, les moyennes mobiles de Henderson et CLF conduisent à des estimations biaisées et, dans le cas du choc sur la tendance-cycle, à considérer une augmentation de la tendance bien plusieurs mois avant le choc et le niveau est sous-estimé après le choc.
 Au contraire, l'utilisation de moyenne mobiles robustes à ces chocs permet de bien prendre en compte la nature des chocs et leur influence sur la tendance-cycle.\
 La @fig-ex-covid montre les estimations de la tendance-cycle sur l'indice de production industrielle (IPI) dans l'industrie manufacturière durant la période du COVID-19.
-Sur cette période, la propriété souhaitée par la tendance-cycle publiée est de reproduire les points de retournement conjoncturel à la bonne date : un pic en février 2020 et un creux en mars 2020.
+Sur cette période, la propriété souhaitée par la tendance-cycle publiée est de reproduire les points de retournement conjoncturel à la bonne date : un pic en février 2020 et un creux en mars 2020.
 Seule l'utilisation de moyennes mobiles robustes à deux chocs en niveau en mars et avril 2020 permet de reproduire ce phénomène économique.
 
 ```{r}
@@ -570,10 +570,10 @@ autoplot(data_ipi) +
                        labels = zoo::as.yearmon) 
 ```
 
-## Quelle méthode choisir ?
+## Quelle méthode choisir ?
 
 Une critique classique des estimations de la tendance-cycle (et de manière plus générale des méthodes de décomposition) est qu'elles ne sont pas définies de manière unique et qu'il n'y a donc pas de définition unique et acceptée par tous.
-Les critères classiquement utilisés dans la littérature afin de comparer les méthodes d'estimations de la tendance-cycle [voir par exemple @martin2009issuestc; @picard_matthews_2016; @dagumBianconcini2023] sont :
+Les critères classiquement utilisés dans la littérature afin de comparer les méthodes d'estimations de la tendance-cycle [voir par exemple @martin2009issuestc ; @picard_matthews_2016 ; @dagumBianconcini2023] sont :
 
 1. Les révisions entre la première et la dernière estimation.
 
@@ -581,7 +581,7 @@ Les critères classiquement utilisés dans la littérature afin de comparer les 
 
 3. Le nombre d'ondulations indésirables, en parlant d'ondulation indésirable lorsque deux points de retournement se produisent en moins de dix mois.
 
-Toutefois, plusieurs critiques peuvent être faites à ces critères :
+Toutefois, plusieurs critiques peuvent être faites à ces critères :
 
 - Comme notamment montré dans @inseeDTM202401, il est utile d'étudier à la fois les révisions entre deux estimations consécutives ainsi que les révisions entre toutes les estimations intermédiaires et la dernière estimation.
 Cela permet de mettre en évidence des sous-optimalités dans certaines méthodes pour les moyennes mobiles asymétriques utilisées lorsque plusieurs points dans le futur sont connus.
@@ -592,7 +592,7 @@ Cela permet d'éviter des cas où le point de retournement est détecté par des
 Dès lors, le nombre d'ondulations indésirables sera donc réduit^[
 Par exemple, en prenant le cas extrême d'une tendance-cycle constante sur l'ensemble de la période, les révisions et le nombre d'ondulations indésirables seront nuls !
 ].
-C'est notamment le cas lorsque l'on compare le filtre CLF à la moyenne mobile de Henderson : la première moyenne mobile modélisant une tendance locale de degré 1 (contrairement à une tendance locale de degré 3 pour la seconde), elle conduira à des estimations plus lisses moins révisées et avec moins d'ondulations indésirables.
+C'est notamment le cas lorsque l'on compare le filtre CLF à la moyenne mobile de Henderson : la première moyenne mobile modélisant une tendance locale de degré 1 (contrairement à une tendance locale de degré 3 pour la seconde), elle conduira à des estimations plus lisses moins révisées et avec moins d'ondulations indésirables.
 
 - La comparaison de deux méthodes utilisant des moyennes mobiles symétriques différentes (comme Henderson et CLF) peut être perturbée par le fait que les points de retournement peuvent être détectés à des dates différentes.
 Par ailleurs, la définition utilisée pour qualifier les oscillations indésirables (deux points de retournement en moins de 10 mois) ne permet pas de prendre en compte les faux points de retournement et les périodes du type COVID-19 (où deux points de retournement apparaissent en moins de 10 mois).
@@ -606,7 +606,7 @@ Parmi les méthodes présentées dans cet article, ce sont les moyennes mobiles 
 
 Cette section décrit les principales recommandations concernant la publication et la présentation de la tendance-cycle.
 Ces différentes recommandations seront illustrées avec l'estimation de la tendance-cycle de l'IPI dans l'industrie manufacturière à partir de la moyenne mobile d'Henderson de 13 termes et des moyennes mobiles de Musgrave avec $R=3,5$ (comme ce qui est effectué par ABS).
-Cette estimation se fait via le code :
+Cette estimation se fait via le code :
 
 ```{r}
 #| echo: true
@@ -614,21 +614,21 @@ library(publishTC)
 tc_h <- henderson_smoothing(french_ipi[, "manufacturing"], length = 13)
 ```
 
-La principale recommandation de présentation est que la tendance-cycle doit être présentée conjointement avec la série désaisonnalisée [@abs_time_series_guidelines; @martin2009issuestc; @mclaren_zhang_2010; @imf_qna_2017].
+La principale recommandation de présentation est que la tendance-cycle doit être présentée conjointement avec la série désaisonnalisée [@abs_time_series_guidelines ; @martin2009issuestc ; @mclaren_zhang_2010 ; @imf_qna_2017].
 Cela permet aux utilisateurs de clairement discerner l'ampleur et le signe de l'irrégulier (par différenciation) et les confronter à sa propre connaissance de l'activité économique [@abs_smoothing_1987].
 
 ## Refléter l'incertitude des dernières estimations
 
-La principale critique des estimations de la tendance-cycle est l'ampleur des révisions : mêmes si celles-ci sont finalement moins importantes que celles de la séries CVS-CJO, elles sont concentrées sur les 3 premières estimations.
-De nombreux auteurs s'accordent donc à recommander que la présentation des estimations de la tendance-cycle doit mettre en lumière le moindre degré de fiabilité de la tendance-cycle sur les dernières observations [ @huot1989note; @kenny1982local; @imf_qna_2017].
-Il faut en particulier être prudent sur l'analyse des points de retournement sur les dernières périodes [lorsque l'estimation n'est pas définitive, @abs_smoothing_1987; @abs_time_series_guidelines; @mclaren_zhang_2010].
+La principale critique des estimations de la tendance-cycle est l'ampleur des révisions : mêmes si celles-ci sont finalement moins importantes que celles de la séries CVS-CJO, elles sont concentrées sur les 3 premières estimations.
+De nombreux auteurs s'accordent donc à recommander que la présentation des estimations de la tendance-cycle doit mettre en lumière le moindre degré de fiabilité de la tendance-cycle sur les dernières observations [ @huot1989note ; @kenny1982local ; @imf_qna_2017].
+Il faut en particulier être prudent sur l'analyse des points de retournement sur les dernières périodes [lorsque l'estimation n'est pas définitive, @abs_smoothing_1987 ; @abs_time_series_guidelines ; @mclaren_zhang_2010].
 La façon la plus simple de mettre en oeuvre cette recommandation est de mettre les dernières estimations de la tendance-cycle en pointillé. 
-ABS ne met pas en oeuvre cette recommandation mais Statistique Canada ajoute l'avertissement «\ La plus grande variabilité associée aux estimations de la tendance-cycle est indiquée au moyen d'une ligne pointillée dans le graphique pour le mois de référence en cours et pour les trois mois précédents\ ».
+ABS ne met pas en oeuvre cette recommandation mais Statistique Canada ajoute l'avertissement « La plus grande variabilité associée aux estimations de la tendance-cycle est indiquée au moyen d'une ligne pointillée dans le graphique pour le mois de référence en cours et pour les trois mois précédents ».
 
 Dans `publishTC`, la tendance-cycle peut-être représentée conjointement avec la série désaisonnalisée en utilisant les fonctions `plot()` et `ggplot2::autoplot()`.
 Par défaut, les quatre dernières estimations de la tendance-cycle sont en pointillés (comme dans les publications de Statistique Canada).
 Ces pointillés peuvent être supprimés en utilisant le paramètre `n_last_tc = 0`.
-En reprenant notre exemple :
+En reprenant notre exemple :
 
 ```{r}
 #| echo: true
@@ -640,14 +640,14 @@ autoplot(tc_h, xlim = c(2022, NA))
 ```
 
 @martin2009issuestc recommandent que le nombre de mois en pointillés soit déterminé par la statistique MCD (*month of cyclical dominance*) qui est le nombre de mois ou de trimestres nécessaires pour que la variation moyenne absolue de la tendance-cycle soit supérieure à celle de l'irrégulier.
-Pour une série mensuelle, notons :
+Pour une série mensuelle, notons :
 $$
 R_k=\frac{\bar{I_k}}{\bar{C_k}}=\frac{\sum\lvert I_t-I_{t-k}\rvert}{\sum\lvert TC_t-TC_{t-k}\rvert}\text{ pour }k\in\{1,2,\dots, 12\}.
 $$
-L'ampleur de la tendance-cycle tend à augmenter avec la durée alors que la variation de la composante irrégulière devrait être constante : $R_k$ devrait donc être décroissante.
-La statistique MCD est le premier délai $d$ pour lequel tous les ratios $(R_k)_{k\geq d}$ sont inférieurs à 1 : il s'agit donc du nombre de mois pour que la composante tendance-cycle devienne dominante par rapport à la composante irrégulière.
+L'ampleur de la tendance-cycle tend à augmenter avec la durée alors que la variation de la composante irrégulière devrait être constante : $R_k$ devrait donc être décroissante.
+La statistique MCD est le premier délai $d$ pour lequel tous les ratios $(R_k)_{k\geq d}$ sont inférieurs à 1 : il s'agit donc du nombre de mois pour que la composante tendance-cycle devienne dominante par rapport à la composante irrégulière.
 Elle peut être calculée en utilisant la fonction `publishTC::mcd()` et la recommandation de @martin2009issuestc peut être appliquée en utilisant le paramètre `n_last_tc = NULL`.
-Dans notre exemple, cette valeur est de `{r} publishTC::mcd(tc_h)` mois :
+Dans notre exemple, cette valeur est de `{r} publishTC::mcd(tc_h)` mois :
 
 ```{r}
 #| echo: true
@@ -677,7 +677,7 @@ Afin de juger de la qualité des estimations en temps réel de la tendance-cycle
 Notons $\boldsymbol v=(v_{-h},\dots, v_{h})$ la moyenne mobile symétrique utilisée pour calculer les estimations finales et $\boldsymbol w^0,\dots, \boldsymbol w^{h-1}$ les moyennes mobiles asymétriques utilisées pour les estimations intermédiaires. 
 $\boldsymbol w^0=(w_{-h}^0, \dots, w_{0}^0)$ est utilisée pour les estimations en temps-réel (lorsque 0 point dans le futur est connu), $\boldsymbol w^1=(w_{-h}^1, \dots, w_{0}^1, w_{1}^1)$ pour l'avant dernière estimation (lorsque 1 point dans le futur est connu), etc.
 Soit $y_{t-h},\dots,y_{t}$ la série observée sur les $h$ dernières dates (lesquelles les moyennes mobiles asymétriques sont utilisées pour obtenir les estimations intermédiaires aux dates $t-h$ à $t$).
-Les prévisions implicites $y_{t+1}^*,\dots y_{t+h}^*$ induites par $w^0,\dots w^{h-1}$ sont les prévisions $y_t$ pour lesquelles la moyenne mobile asymétrique appliquée à la série étendue $\boldsymbol y^* = (y_{t-h}, \dots, y_t, y_{t+1}^*,\dots y_{t+h}^*)$ produise les mêmes estimations que les moyennes mobiles asymétriques appliquées sur $\boldsymbol y^*$\ :
+Les prévisions implicites $y_{t+1}^*,\dots y_{t+h}^*$ induites par $w^0,\dots w^{h-1}$ sont les prévisions $y_t$ pour lesquelles la moyenne mobile asymétrique appliquée à la série étendue $\boldsymbol y^* = (y_{t-h}, \dots, y_t, y_{t+1}^*,\dots y_{t+h}^*)$ produise les mêmes estimations que les moyennes mobiles asymétriques appliquées sur $\boldsymbol y^*$ :
 \begin{align*}
 \underbrace{\sum_{i=-h}^0 v_iy_{t+i} + \sum_{i=1}^h v_iy_{t+i}^*}_{\text{lissage par }\boldsymbol v\text{ de la série étendue}} &=
 \underbrace{\sum_{i=-h}^0 w_i^0y_{t+i}}_{\text{lissage par }\boldsymbol w^0\text{ utilisant }0\text{ point après }t} \\
@@ -706,7 +706,7 @@ tc_clf <- clf_smoothing(french_ipi[,"manufacturing"])
 ## Graphique *lollipop* (en bâtonnet)
 
 Afin de mettre de mettre l'accent sur la tendance-cycle et le niveau de l'irrégulier présent dans la série CVS-CJO, @mclaren_zhang_2010 suggèrent de réaliser des graphiques en bâtonnet, également appelés *lollypop*. 
-Ils permettent également de mettre en évidence les points de retournement : trois valeurs irrégulières du même côté de la tendance (i.e. : du même signe) peut suggérer le début d'un point d'inflexion et d'un changement de la direction sous-jacente.
+Ils permettent également de mettre en évidence les points de retournement : trois valeurs irrégulières du même côté de la tendance (i.e. : du même signe) peut suggérer le début d'un point d'inflexion et d'un changement de la direction sous-jacente.
 Ce graphique est réalisable à partir des fonctions `publishTC::lollypop()` et `publishTC::gglollypop()`.
 
 ```{r}
@@ -720,7 +720,7 @@ gglollypop(tc_h, xlim = c(2022, NA))
 ## Représentation des taux de croissance
 
 Afin de mettre en avant les évolutions de la tendance-cycle, pour représenter les taux de croissance des séries @mclaren_zhang_2010 suggèrent de faire un graphique en bâton pour les évolutions de la série désaisonnalisée et de garder une représentation en lignes pour les évolutions de la tendance-cycle.
-Cela permet : 1) d'éviter d'accorder trop d'importance aux évolutions de la série désaisonnalisée qui peuvent être fortement influencées par l'irrégulier\ ; et 2) de donner une direction claire des mouvements cycliques en indiquant la position dans le cycle.
+Cela permet : 1) d'éviter d'accorder trop d'importance aux évolutions de la série désaisonnalisée qui peuvent être fortement influencées par l'irrégulier ; et 2) de donner une direction claire des mouvements cycliques en indiquant la position dans le cycle.
 
 Ce graphique est réalisable à partir des fonctions `publishTC::growthplot()` et `publishTC::gggrowthplot()`.
 Par défaut, le taux de croissance représenté correspond au glissement mensuel, ce qui peut être modifié en utilisant le paramètre `lag` (par exemple, pour une série mensuelle `lag = -4` permet de représenter les glissements trimestriels et `lag = -12` les glissements annuels).
@@ -736,8 +736,6 @@ library(patchwork) # Pour combiner les graphiques
         ggtitle("Glissement trimestriel")) 
 ```
 
-<!-- TODO : sa_bar_line = TRUE -->
-
 
 <!-- @abs_time_series_guidelines La composante résiduelle/irrégulière ayant une grande influence sur les mouvements des données désaisonnalisées, le comportement sous-jacent des séries de données est difficile à discerner. C'est pourquoi il convient de mettre l'accent sur les estimations de la tendance dans la section des points clés des publications, plutôt que sur les estimations corrigées des variations saisonnières. -->
 <!-- Les estimations de la tendance sont les séries qu'il est préférable de mettre en avant lorsque l'on discute du comportement des séries temporelles dans les points clés des publications. Les mouvements des séries originales et corrigées des variations saisonnières ne doivent généralement pas être mis en avant dans les points clés. -->
@@ -751,28 +749,28 @@ library(patchwork) # Pour combiner les graphiques
 <!-- @martin2009issuestc recommandent d'utiliser le ratio irrégulier sur signal (I/C) qui représente le rapport entre la variation absolue moyenne de la composante irrégulière et de la composante tendancielle du cycle -->
 
 
-# Comment mettre en place une chaine de production automatique ?
+# Comment mettre en place une chaine de production automatique ?
 
 Cet article présente le package `publishTC` qui permet d'estimer et de présenter facilement plusieurs estimations de la tendance-cycle ce facilite la mise en production de cette composante.
-Une mise en production automatique peut alors être mise en place et c'est ce qui a été fait sur des séries de dix publications de l'Insee (environ 80 séries) :
+Une mise en production automatique peut alors être mise en place et c'est ce qui a été fait sur des séries de dix publications de l'Insee (environ 80 séries) :
 
-- Climats des affaires France (2 séries) ;
+- Climats des affaires France (2 séries) ;
 
-- Enquête de conjoncture dans l'Industrie (11 séries) ;
+- Enquête de conjoncture dans l'Industrie (11 séries) ;
 
-- Enquête de conjoncture dans les services (7 séries) ;
+- Enquête de conjoncture dans les services (7 séries) ;
 
-- Enquête de conjoncture dans le commerce de détail et l'automobile (5 séries) ;
+- Enquête de conjoncture dans le commerce de détail et l'automobile (5 séries) ;
 
-- Enquête de conjoncture auprès des ménages (13 séries) ;
+- Enquête de conjoncture auprès des ménages (13 séries) ;
 
-- Consommation mensuelle des ménages en biens (16 séries) ;
+- Consommation mensuelle des ménages en biens (16 séries) ;
 
-- Nombre de créations d'entreprises (14 séries) ;
+- Nombre de créations d'entreprises (14 séries) ;
 
-- Indice de chiffre d'affaires (5 séries) ;
+- Indice de chiffre d'affaires (5 séries) ;
 
-- Indice de production industrielle (5 séries) ;
+- Indice de production industrielle (5 séries) ;
 
 - Indice de volume des ventes (4 séries).
 
@@ -783,7 +781,7 @@ Cette section décrit ce modèle de mise en production et comment facilement ajo
 Pour chaque publication, un fichier de paramètre `.yml` est créé sous <https://github.com/AQLT/publishTC.wp/tree/master/data> contenant l'ensemble des informations nécessaire à la mise en production.
 Ainsi, pour ajouter une nouvelle publication il suffit de créer un nouveau fichier de paramètre.
 Décrivons ici le fichier [`IPI.yml`](https://github.com/AQLT/publishTC.wp/blob/master/data/IPI.yml) associé à l'indice de production industrielle et contenant 5 séries (IPI dans l'industrie manufacturière, dans l'agro-alimentaire, dans les biens d'équipement, les matériels de transport et les autres industries).
-Celui-ci se décompose en 6 blocs :
+Celui-ci se décompose en 6 blocs :
 
 ```r
 dataset: IPI # <1>
@@ -801,12 +799,12 @@ plots: # <5>
 4. Méthodes d'estimation de la tendance-cycle.
 5. Différents paramètres graphiques.
 
-## Bloc `series` : informations sur les séries à publier
+## Bloc `series` : informations sur les séries à publier
 
 Le bloc `series` contient les mêmes paramètres pour chaque série.
 À chaque série de l'Insee est associé un identifiant, appelé idBank, permettant, grâce au service web SDMX de l'Insee, de facilement récupérer les données.
-Par exemple, l'idBank associé à l'IPI dans l'industrie manufacturière est `010768307` : la dernière publication de cette série est disponible à l’adresse <https://www.insee.fr/fr/statistiques/serie/010768307>.
-Ce lien contient également d'autres informations : graphique, documentation et parfois les révisions associées aux publications successives.
+Par exemple, l'idBank associé à l'IPI dans l'industrie manufacturière est `010768307` : la dernière publication de cette série est disponible à l’adresse <https://www.insee.fr/fr/statistiques/serie/010768307>.
+Ce lien contient également d'autres informations : graphique, documentation et parfois les révisions associées aux publications successives.
 
 ```r
 series:
@@ -846,18 +844,18 @@ series:
 
 Pour le lissage par des moyennes mobiles robustes de Henderson et de Musgrave, les points atypiques sont initialisées via la fonction `publishTC::x13_regarima_outliers()`.
 Même s'il est préférable de les analyser pour chaque série, cela permet de faire une initialisation rapide.
-Par ailleurs, afin d'éviter des révisions sur les points atypiques retenus, ces derniers ne sont plus modifiés : lors d'une mise en production, il est recommandé d'analyser les nouveaux points afin de déterminer s'il ne faut pas en rajouter.
+Par ailleurs, afin d'éviter des révisions sur les points atypiques retenus, ces derniers ne sont plus modifiés : lors d'une mise en production, il est recommandé d'analyser les nouveaux points afin de déterminer s'il ne faut pas en rajouter.
 
-Pour l'ensemble des publications, la première date d'estimation est fixée à janvier 2012 : cela permet d'éviter d'avoir des potentielles ruptures dans les données lointaines^[
+Pour l'ensemble des publications, la première date d'estimation est fixée à janvier 2012 : cela permet d'éviter d'avoir des potentielles ruptures dans les données lointaines^[
 Par exemple, il n'y avait pas d'enquête de conjoncture en août avant 2008 et l'enquête de conjoncture dans les services n'est mensuelle que depuis 2000.
 ] qui perturberaient l'analyse des points atypiques et la construction des intervalles de confiance.
 Par ailleurs, puisque l'intérêt est principalement porté sur les observations, il n'a pas paru nécessaire d'étudier le passé lointain.
 
 De la même façon que dans les publications de Statistique Canada et ABS, la longueur de la moyenne mobile symétrique est ici fixée à 13 termes pour l'ensemble des publications.
 
-## Bloc `methods` : méthodes d'estimation
+## Bloc `methods` : méthodes d'estimation
 
-Le bloc `methods` décrit les méthodes d'estimation de la tendance-cycle à utiliser ainsi que les noms à afficher dans les différents graphiques :
+Le bloc `methods` décrit les méthodes d'estimation de la tendance-cycle à utiliser ainsi que les noms à afficher dans les différents graphiques :
 
 ```r
 methods:
@@ -888,19 +886,19 @@ La longueur de la moyenne mobile de Henderson étant de 13 termes (bloc `series`
 3. Lissage par moyennes mobiles robustes de Henderson et de Musgrave.
 La longueur de la moyenne mobile de Henderson étant de 13 termes (bloc `series`), l'I/C ratio utilisé est de 3,5.
 4. Lissage par moyennes mobiles robustes de Henderson et de Musgrave avec paramétrisation locale de l'I/C ratio.
-5. Lissage par CLF et méthode «\ couper-et-normaliser\ » (comme pour Statistique Canada).
+5. Lissage par CLF et méthode « couper-et-normaliser » (comme pour Statistique Canada).
 6. Lissage par CLF et ALF.
 
-Pour l'ensemble des publications, deux méthodes ne sont pas étudiées :
+Pour l'ensemble des publications, deux méthodes ne sont pas étudiées :
 
 - Lissage par moyennes mobiles robustes de Henderson et de Musgrave avec ratio I/C **fixé** puisque l'on recommande plutôt d'effectuer une paramétrisation locale de ce paramètre afin de minimiser les révisions en temps-réel.
 
-- Lissage par CLF et ALF : puisqu'aucun institut semble utiliser les moyennes mobiles asymétriques ALF, par simplification nous nous sommes restreint à la méthode «\ couper-et-normaliser\ » utilisée par Statistique Canada.
+- Lissage par CLF et ALF : puisqu'aucun institut semble utiliser les moyennes mobiles asymétriques ALF, par simplification nous nous sommes restreint à la méthode « couper-et-normaliser » utilisée par Statistique Canada.
 
  
-## Bloc `plots` : paramètres graphiques
+## Bloc `plots` : paramètres graphiques
 
-Le bloc `plots` permet de configurer les différents rendus du rapport : graphiques, tableaux, etc.
+Le bloc `plots` permet de configurer les différents rendus du rapport : graphiques, tableaux, etc.
 
 ```r
 plots:
@@ -934,15 +932,15 @@ plots:
 ```
 1. Nombre d'années à afficher sur les graphiques.
 2. Nombre de décimales.
-3. Faut-il ajouter un bloc avec l'ensemble des graphiques (usuel, bâtonnet, etc.) pour chaque méthode ? Bloc ici non affiché.
-4. Faut-il ajouter un bloc avec, pour chaque type de graphique, l'ensemble des méthodes ?
-5. Quels sont les graphiques à tracer : usuel (`normal`), intervalles de confiance (`confint`), en bâtonnet (`lollypop`) et prévisions implicites `implicit_forecasts`.
-6. Faut-il ajouter des graphiques comparant l'ensemble des méthodes d'estimation ? Si `interactive: yes` un graphique interactif est ajouté avec les estimations sur l'ensemble de la période.
-7. Faut-il faire des graphiques analysant les différentes révisions ?
-8. Faut-il ajouter un tableau avec l'ensemble des révisions (`enabled: yes`) ?
+3. Faut-il ajouter un bloc avec l'ensemble des graphiques (usuel, bâtonnet, etc.) pour chaque méthode ? Bloc ici non affiché.
+4. Faut-il ajouter un bloc avec, pour chaque type de graphique, l'ensemble des méthodes ?
+5. Quels sont les graphiques à tracer : usuel (`normal`), intervalles de confiance (`confint`), en bâtonnet (`lollypop`) et prévisions implicites `implicit_forecasts`.
+6. Faut-il ajouter des graphiques comparant l'ensemble des méthodes d'estimation ? Si `interactive: yes` un graphique interactif est ajouté avec les estimations sur l'ensemble de la période.
+7. Faut-il faire des graphiques analysant les différentes révisions ?
+8. Faut-il ajouter un tableau avec l'ensemble des révisions (`enabled: yes`) ?
 Par ailleurs, si `contribution_of_sa: yes` un second tableau est ajouté en calculant la part des révisions de la tendance-cycle liées aux révisions de la série CVS-CJO.
 9. Nombre maximal d'observations à afficher dans le tableau des révisions.
-10. Faut-il ajouter des informations générales ? Il s'agit pour chaque méthode les valeurs de l'I/C ratio, MCD, la longueur de la moyenne mobile symétrique et également des points atypiques modélisés pour le lissage par moyennes mobiles robustes.
+10. Faut-il ajouter des informations générales ? Il s'agit pour chaque méthode les valeurs de l'I/C ratio, MCD, la longueur de la moyenne mobile symétrique et également des points atypiques modélisés pour le lissage par moyennes mobiles robustes.
 
 Afin d'isoler les révisions liées à l'ajout d'une nouvelle date de celle associée à la mise à jour des données passées, il est possible de calculer la part des révisions liées à la mise à jour des séries CVS-CJO.
 Étudions par exemple les révisions par rapport à la publication de mai 2025.
@@ -950,7 +948,7 @@ Notons $y_{t|t'}$ la série CVS-CJO à la date $t$ publiée à la date $t'$ et $
 $y_{t|2025.05}$ correspond donc à la série CVS-CJO publiée en mai 2025 et $y_{t|2025.04}$ à la série publiée en avril 2025.
 Par rapport au mois de mai 2025, la révision totale de la tendance-cycle correspond donc, pour chaque date $t,$ à $\widehat TC_{t} (y_{t|2025.05}) - \widehat TC_{t} (y_{t|2025.04}).$
 Notons maintenant $y_{t|2025.05}^{2025.04}$ la série CVS-CJO publiée en mai 2025 dont on a tronqué les valeurs jusqu'en avril 2025 (i.e. en supprimant la dernière donnée).
-La révision totale peut donc s'écrire\ :
+La révision totale peut donc s'écrire :
 \begin{align*}
 &\underbrace{\widehat TC_{t} (y_{t|2025.05}) - \widehat TC_{t} (y_{t|2025.04})}_{\text{Révision totale à la dernière publication}} = \\
 &\quad
@@ -965,17 +963,17 @@ En somme, afin d'éclairer le débat public et réduire le risque que les utilis
 En effet, en n'enlevant que la composante saisonnière et les jours ouvrables, la désaisonnalisation laisse dès lors l'influence de la tendance-cycle et de l'irrégulier.
 Lorsque l'irrégulier est important (i.e. lorsque la série est bruitée), lisser les séries pour analyser directement la tendance de court terme (i.e. la composante tendance-cycle) apporte une information supplémentaire pour le diagnostic conjoncturel en améliorant la compréhension et la détection des points de retournement et en réduisant l'impact des évènements ponctuels, ce qui peut contribuer à une prise de décision opportune et éclairée. 
 La publication de la tendance-cycle n'a pas vocation à remplacer celle des séries désaisonnalisées, ni celle des séries brutes.
-Ces trois séries doivent être utilisées de manière complémentaire : chaque composante a ses forces et ses faiblesses et répond à des besoins différents et leur publication conjointe aide à prendre des décisions impartiales et éclairée.
+Ces trois séries doivent être utilisées de manière complémentaire : chaque composante a ses forces et ses faiblesses et répond à des besoins différents et leur publication conjointe aide à prendre des décisions impartiales et éclairée.
 
 Les seuls instituts publiant régulièrement la composante tendance cycle, Australian Bureau of Statistics (ABS) et Statistique Canada, utilisent des moyennes mobiles.
-Pour l'estimation finale, une moyenne mobile symétrique est utilisée (en utilisant autant de point dans le passé que dans le futur) : les estimations intermédiaires doivent donc être basées sur des moyennes mobiles asymétriques, ce qui conduira à des révisions au fur et à mesure que de nouvelles observations sont disponibles.
-Même si les séries désaisonnalisées sont davantage révisées sur une plus longues périodes, les révisions de la tendance-cycle sont concentrées sur les trois premières estimations : lors de la publication de cette composante, il est donc recommandé de mettre en avant l'incertitude des dernières estimations (via des pointillés, la construction d'intervalles de confiance ou l'ajout des prévisions implicites).
-Il est également recommandé de présenter conjointement la tendance-cycle et la série désaisonnalisée : cela permet aux utilisateurs de clairement discerner l'ampleur et le signe de l'irrégulier et les confronter à sa propre connaissance de l'activité économique.
+Pour l'estimation finale, une moyenne mobile symétrique est utilisée (en utilisant autant de point dans le passé que dans le futur) : les estimations intermédiaires doivent donc être basées sur des moyennes mobiles asymétriques, ce qui conduira à des révisions au fur et à mesure que de nouvelles observations sont disponibles.
+Même si les séries désaisonnalisées sont davantage révisées sur une plus longues périodes, les révisions de la tendance-cycle sont concentrées sur les trois premières estimations : lors de la publication de cette composante, il est donc recommandé de mettre en avant l'incertitude des dernières estimations (via des pointillés, la construction d'intervalles de confiance ou l'ajout des prévisions implicites).
+Il est également recommandé de présenter conjointement la tendance-cycle et la série désaisonnalisée : cela permet aux utilisateurs de clairement discerner l'ampleur et le signe de l'irrégulier et les confronter à sa propre connaissance de l'activité économique.
 
-Cet article présente également deux extension possibles aux moyennes mobiles de Henderson et de Musgrave (utilisées par ABS et la méthode X-13ARIMA-SEATS) permettant\ : 1) de réduire les révisions dans les estimations intermédiaires, en particulier autour des points de retournement\ ; 2) de prendre directement en compte, dans la construction des moyennes mobiles, des chocs (ponctuels ou permanents) afin d'éviter qu'ils ne biaisent les estimations de la tendance-cycle et afin de correctement représenté les points de retournement autour de périodes de fortes turbulence (comme le COVID-19).
+Cet article présente également deux extension possibles aux moyennes mobiles de Henderson et de Musgrave (utilisées par ABS et la méthode X-13ARIMA-SEATS) permettant : 1) de réduire les révisions dans les estimations intermédiaires, en particulier autour des points de retournement ; 2) de prendre directement en compte, dans la construction des moyennes mobiles, des chocs (ponctuels ou permanents) afin d'éviter qu'ils ne biaisent les estimations de la tendance-cycle et afin de correctement représenté les points de retournement autour de périodes de fortes turbulence (comme le COVID-19).
 Ces deux extensions peuvent également être combinées et sont implémentées dans le package R `publishTC`. 
 Ce dernier permet également de reproduire le lissage avec les méthodes utilisées par ABS et Statistique Canada, ainsi que de produire des visualisations.
-Sa facilité d'utilisation permet de mettre en place une chaîne de production de la composante tendance-cycle : le modèle simplifié proposé dans cette article pour des publications de l'Insee permet de facilement ajouter de nouvelles publications et de nouvelles séries.
+Sa facilité d'utilisation permet de mettre en place une chaîne de production de la composante tendance-cycle : le modèle simplifié proposé dans cette article pour des publications de l'Insee permet de facilement ajouter de nouvelles publications et de nouvelles séries.
 Il a été appliqué sur dix publications (environ 80 séries, <https://aqlt.github.io/publishTC.wp/>) permettant d'étudier l'intérêt de la composante tendance-cycle sur différents cas d'usage, de comparer plusieurs méthodes d'estimation et de faire des analyses de révisions.
 Pour une mise en production officielle de la tendance-cycle il est toutefois recommandé d'analyser précisément les résultats en utilisant l'expertise économique que le producteur a sur les séries, permettant notamment de choisir la méthode représentant au mieux la réalité économique de la série et ses points de retournement.
 
@@ -988,7 +986,7 @@ Pour une mise en production officielle de la tendance-cycle il est toutefois rec
 <!-- Pour surmonter ce problème, ABS utilise une approche standard appliquée à toutes les séries de manière consistente. La série désaisonnalisée où les gros points atypiques osnt supprimés est utilisée et ensuite H13 est utilisé. L'approche est transparente. La disponibilité des estimations corrigées des variations saisonnières permet aux utilisateurs plus sophistiqués, tels que le Trésor et les banques centrales, de construire leurs propres estimations du cycle tendanciel en utilisant leurs méthodes d'estimation ou de filtrage préférées. -->
 
 
-<!-- Tendance=cycle : il s'agit de la meilleure mesure de la direction sous-jacente à long terme d'une série. Cette mesure fournit une perspective historique lissée du modèle de comportement sous-jacent sans l'impact des influences liées au calendrier ou irrégulières. Les utilisateurs peuvent se servir de cet indicateur pour surveiller le niveau et la forme des points d'inflexion dans le temps, ce qui peut contribuer à une prise de décision opportune et éclairée. -->
+<!-- Tendance=cycle : il s'agit de la meilleure mesure de la direction sous-jacente à long terme d'une série. Cette mesure fournit une perspective historique lissée du modèle de comportement sous-jacent sans l'impact des influences liées au calendrier ou irrégulières. Les utilisateurs peuvent se servir de cet indicateur pour surveiller le niveau et la forme des points d'inflexion dans le temps, ce qui peut contribuer à une prise de décision opportune et éclairée. -->
 
 
 <!-- En pratique, les INS ont le devoir de fournir aux utilisateurs des estimations et des indicateurs qui leur permettent de prendre des décisions impartiales et éclairées. En termes de résultats analytiques, cela signifie la disponibilité des estimations originales, désaisonnalisées et tendancielles. L'approche consistant à calculer et à publier régulièrement les estimations originales, désaisonnalisées et tendancielles est cruciale pour une prise de décision éclairée, car les différentes estimations présentent des forces et des faiblesses. Dans la pratique, les estimations désaisonnalisées ou originales ne doivent pas être utilisées isolément. Les estimations tendancielles, en tant que sous-produit analytique, sont un outil important pour les utilisateurs et les analystes afin de les aider à prendre des décisions éclairées, car elles réduisent l'impact de la volatilité des estimations originales et corrigées des variations saisonnières. Il est important de noter que ni les séries tendancielles ni les séries désaisonnalisées n'ont intrinsèquement plus de valeur ou d'importance l'une que l'autre, mais qu'elles doivent être utilisées de manière complémentaire, les utilisateurs étant informés de l'utilisation appropriée et des limites de chaque estimation et indicateur. -->
