@@ -4,8 +4,8 @@ permissions:
   contents: write
 
 on:
- # schedule:
- #   - cron: '0 0 1 * *'  # Exécuter le 1er de chaque mois à minuit
+ schedule:
+   - cron: '0 0 1 * *'  # Exécuter le 1er de chaque mois à minuit
   workflow_dispatch:
 
 jobs:
