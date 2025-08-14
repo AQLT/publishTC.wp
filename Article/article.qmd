@@ -228,7 +228,7 @@ autoplot(h13_tppre, xlim = c(2021.1, 2024.7),
 Comme le montre cet exemple, il y a donc un intérêt à publier la tendance-cycle, en complément et non en remplacer des séries CVS-CJO, pour enrichir l'analyse de la conjoncture économique.
 Ainsi, la composante tendance-cycle est à privilégier pour l'analyse du cycle conjoncturel, la détection des points de retournements et les prévisions à long-terme [@imf_qna_2017].
 En particulier, par rapport à la série CVS-CJO, la tendance-cycle permet une estimation plus rapide du point de retournement mais avec le risque de détecter des faux points de retournement [@menezes2006timely].
-Naturellement, l'intérêt de publier la tendance-cycle sera d'autant plus grand que la série est bruitée (i.e. : l'irrégulier est important).
+Naturellement, l'intérêt de publier la tendance-cycle sera d'autant plus grand que la série est bruitée (i.e., l'irrégulier est important).
 
 Pour la prévision de court terme, la série désaisonnalisée peut être privilégiée, notamment si l'analyse de l'irrégulier est importante [@abs_interpreting_ts_2001]. 
 C'est notamment le cas lorsque les évolutions de la composante irrégulières peuvent être associées à des évènements économiques ou des mesures politiques et a donc un intérêt pour le conjoncturiste.
@@ -294,7 +294,7 @@ Cette moyenne mobile est généralement symétrique ($\widehat{TC}_t$ est estim�
 
 ## Moyenne mobile de Henderson et de Musgrave {#sec-hend-musgrave}
 
-Pour l’extraction de la tendance-cycle, le moyenne symétrique la plus connue est celle de @henderson1916note. 
+Pour l'extraction de la tendance-cycle, le moyenne symétrique la plus connue est celle de @henderson1916note. 
 Elle est notamment utilisée dans l'algorithme de désaisonnalisation X-13ARIMA-SEATS.
 C'est également la moyenne mobile utilisée par ABS pour obtenir l'estimation finale de la tendance-cycle [@abs_interpreting_ts_2003].
 Notons $h$ la fenêtre de la moyenne mobile d'Henderson, c'est-à-dire que pour estimer la tendance-cycle à la date $t$ ($h$ points avant et après $t$ sont utilisés) : la longueur de la moyenne mobile est donc $2h+1$. 
@@ -312,7 +312,7 @@ $$
 $$
 Cette moyenne mobile étant symétrique et préservant les tendances de degré 2, elle préserve également les tendances de degré 3 et peut, de manière équivalente, être obtenue en modélisant localement une tendance de degré 3 ($d=3$).
 
-Dans X-13-ARIMA-SEATS, permettant de désaisonnaliser des séries qui sont au plus mensuelles, la longueur de la moyenne mobile (i.e. : le paramètre $h$ déterminant le nombre de points utilisés pour l'estimation de la tendance-cycle) est déterminée à partir de l'I/C ratio, noté $R$, défini par :
+Dans X-13-ARIMA-SEATS, permettant de désaisonnaliser des séries qui sont au plus mensuelles, la longueur de la moyenne mobile (i.e., le paramètre $h$ déterminant le nombre de points utilisés pour l'estimation de la tendance-cycle) est déterminée à partir de l'I/C ratio, noté $R$, défini par :
 $$
 R=\frac{\bar{I}}{\bar{C}}=\frac{\sum\lvert I_t-I_{t-1}\rvert}{\sum\lvert TC_t-TC_{t-1}\rvert},
 $$
@@ -586,7 +586,7 @@ Toutefois, plusieurs critiques peuvent être faites à ces critères :
 - Comme notamment montré dans @inseeDTM202401, il est utile d'étudier à la fois les révisions entre deux estimations consécutives ainsi que les révisions entre toutes les estimations intermédiaires et la dernière estimation.
 Cela permet de mettre en évidence des sous-optimalités dans certaines méthodes pour les moyennes mobiles asymétriques utilisées lorsque plusieurs points dans le futur sont connus.
 De la même façon, pour l'analyse du délai dans la détection des points de retournement, il est préférable de calculer le nombre de mois nécessaires pour détecter le bon point de retournement **sans aucune révision future**. 
-Cela permet d'éviter des cas où le point de retournement est détecté par des filtres asymétriques mais ne l'est pas avec l’estimation finale avec un filtre symétrique.
+Cela permet d'éviter des cas où le point de retournement est détecté par des filtres asymétriques mais ne l'est pas avec l'estimation finale avec un filtre symétrique.
 
 - Plus la tendance-cycle sera lisse, plus les révisions et le nombre de points de retournements détectés seront faibles.
 Dès lors, le nombre d'ondulations indésirables sera donc réduit^[
@@ -706,7 +706,7 @@ tc_clf <- clf_smoothing(french_ipi[,"manufacturing"])
 ## Graphique *lollipop* (en bâtonnet)
 
 Afin de mettre de mettre l'accent sur la tendance-cycle et le niveau de l'irrégulier présent dans la série CVS-CJO, @mclaren_zhang_2010 suggèrent de réaliser des graphiques en bâtonnet, également appelés *lollypop*. 
-Ils permettent également de mettre en évidence les points de retournement : trois valeurs irrégulières du même côté de la tendance (i.e. : du même signe) peut suggérer le début d'un point d'inflexion et d'un changement de la direction sous-jacente.
+Ils permettent également de mettre en évidence les points de retournement : trois valeurs irrégulières du même côté de la tendance (i.e., du même signe) peut suggérer le début d'un point d'inflexion et d'un changement de la direction sous-jacente.
 Ce graphique est réalisable à partir des fonctions `publishTC::lollypop()` et `publishTC::gglollypop()`.
 
 ```{r}
@@ -803,7 +803,7 @@ plots: # <5>
 
 Le bloc `series` contient les mêmes paramètres pour chaque série.
 À chaque série de l'Insee est associé un identifiant, appelé idBank, permettant, grâce au service web SDMX de l'Insee, de facilement récupérer les données.
-Par exemple, l'idBank associé à l'IPI dans l'industrie manufacturière est `010768307` : la dernière publication de cette série est disponible à l’adresse <https://www.insee.fr/fr/statistiques/serie/010768307>.
+Par exemple, l'idBank associé à l'IPI dans l'industrie manufacturière est `010768307` : la dernière publication de cette série est disponible à l'adresse <https://www.insee.fr/fr/statistiques/serie/010768307>.
 Ce lien contient également d'autres informations : graphique, documentation et parfois les révisions associées aux publications successives.
 
 ```r
@@ -947,7 +947,7 @@ Afin d'isoler les révisions liées à l'ajout d'une nouvelle date de celle asso
 Notons $y_{t|t'}$ la série CVS-CJO à la date $t$ publiée à la date $t'$ et $\widehat TC_{t}(y_{\cdot|t'})$ l'estimation de la tendance-cycle associée à ces données.
 $y_{t|2025.05}$ correspond donc à la série CVS-CJO publiée en mai 2025 et $y_{t|2025.04}$ à la série publiée en avril 2025.
 Par rapport au mois de mai 2025, la révision totale de la tendance-cycle correspond donc, pour chaque date $t,$ à $\widehat TC_{t} (y_{t|2025.05}) - \widehat TC_{t} (y_{t|2025.04}).$
-Notons maintenant $y_{t|2025.05}^{2025.04}$ la série CVS-CJO publiée en mai 2025 dont on a tronqué les valeurs jusqu'en avril 2025 (i.e. en supprimant la dernière donnée).
+Notons maintenant $y_{t|2025.05}^{2025.04}$ la série CVS-CJO publiée en mai 2025 dont on a tronqué les valeurs jusqu'en avril 2025 (i.e., en supprimant la dernière donnée).
 La révision totale peut donc s'écrire :
 \begin{align*}
 &\underbrace{\widehat TC_{t} (y_{t|2025.05}) - \widehat TC_{t} (y_{t|2025.04})}_{\text{Révision totale à la dernière publication}} = \\
@@ -961,7 +961,7 @@ La révision totale peut donc s'écrire :
 
 En somme, afin d'éclairer le débat public et réduire le risque que les utilisateurs tirent des conclusions inappropriées, il est intéressant de publier la composante tendance-cycle en même temps que les séries désaisonnalisées, notamment lorsque ces dernières sont bruitées.
 En effet, en n'enlevant que la composante saisonnière et les jours ouvrables, la désaisonnalisation laisse dès lors l'influence de la tendance-cycle et de l'irrégulier.
-Lorsque l'irrégulier est important (i.e. lorsque la série est bruitée), lisser les séries pour analyser directement la tendance de court terme (i.e. la composante tendance-cycle) apporte une information supplémentaire pour le diagnostic conjoncturel en améliorant la compréhension et la détection des points de retournement et en réduisant l'impact des évènements ponctuels, ce qui peut contribuer à une prise de décision opportune et éclairée. 
+Lorsque l'irrégulier est important (i.e., lorsque la série est bruitée), lisser les séries pour analyser directement la tendance de court terme (i.e., la composante tendance-cycle) apporte une information supplémentaire pour le diagnostic conjoncturel en améliorant la compréhension et la détection des points de retournement et en réduisant l'impact des évènements ponctuels, ce qui peut contribuer à une prise de décision opportune et éclairée. 
 La publication de la tendance-cycle n'a pas vocation à remplacer celle des séries désaisonnalisées, ni celle des séries brutes.
 Ces trois séries doivent être utilisées de manière complémentaire : chaque composante a ses forces et ses faiblesses et répond à des besoins différents et leur publication conjointe aide à prendre des décisions impartiales et éclairée.
 

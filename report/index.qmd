@@ -1,5 +1,5 @@
 ---
-title: "Et si l'on publiait la composante tendance-cycle ?"
+title: "Et si l'on publiait la tendance-cycle ?"
 format: 
   html:
     toc: true
