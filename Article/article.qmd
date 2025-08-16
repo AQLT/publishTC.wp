@@ -102,7 +102,7 @@ Cet article décrit l'intérêt de publier cette composante tendance-cycle, les 
 Cet article détaille également des recommandations de présentation de cette composante et comment facilement mettre en production son estimation grâce à des rapports automatisés.
 Ces derniers sont appliqués à une dizaine de publications de l'Insee (environ 80 séries).
 
-Cette étude est accompagné d'un package R, `publishTC`, permettant de facilement mettre en oeuvre toutes les méthodes et recommandations.
+Cette étude est accompagné d'un *package* R, `publishTC`, permettant de facilement mettre en oeuvre toutes les méthodes et recommandations.
 Elle est également entièrement reproductible et tous les codes utilisés sont disponibles sous <https://github.com/AQLT/publishTC.wp>.
 
 Mots clés : séries temporelles, tendance-cycle, désaisonnalisation, points de retournement.
@@ -167,7 +167,7 @@ Elle montre comment ces méthodes peuvent être étendues pour :
 2)	Modéliser les points atypiques afin d'éviter qu'ils biaisent l'estimation de la tendance-cycle.
 
 
-L'étude s'accompagne d'un package R, `publishTC` (<https://github.com/AQLT/publishTC>), qui facilite la mise en œuvre et la comparaison de ces méthodes. 
+L'étude s'accompagne d'un *package* R, `publishTC` (<https://github.com/AQLT/publishTC>), qui facilite la mise en œuvre et la comparaison de ces méthodes. 
 Elle explique également comment mettre en place une production automatique de cette composante, l'appliquant à une dizaine de publications de l'Insee (<https://aqlt.github.io/publishTC.wp/>).
 
 L'ensemble des codes étant librement publié, cette étude est entièrement reproductible.
@@ -751,7 +751,7 @@ library(patchwork) # Pour combiner les graphiques
 
 # Comment mettre en place une chaine de production automatique ?
 
-Cet article présente le package `publishTC` qui permet d'estimer et de présenter facilement plusieurs estimations de la tendance-cycle ce facilite la mise en production de cette composante.
+Cet article présente le *package* `publishTC` qui permet d'estimer et de présenter facilement plusieurs estimations de la tendance-cycle ce facilite la mise en production de cette composante.
 Une mise en production automatique peut alors être mise en place et c'est ce qui a été fait sur des séries de dix publications de l'Insee (environ 80 séries) :
 
 - Climats des affaires France (2 séries) ;
@@ -971,7 +971,7 @@ Même si les séries désaisonnalisées sont davantage révisées sur une plus l
 Il est également recommandé de présenter conjointement la tendance-cycle et la série désaisonnalisée : cela permet aux utilisateurs de clairement discerner l'ampleur et le signe de l'irrégulier et les confronter à sa propre connaissance de l'activité économique.
 
 Cet article présente également deux extension possibles aux moyennes mobiles de Henderson et de Musgrave (utilisées par ABS et la méthode X-13ARIMA-SEATS) permettant : 1) de réduire les révisions dans les estimations intermédiaires, en particulier autour des points de retournement ; 2) de prendre directement en compte, dans la construction des moyennes mobiles, des chocs (ponctuels ou permanents) afin d'éviter qu'ils ne biaisent les estimations de la tendance-cycle et afin de correctement représenté les points de retournement autour de périodes de fortes turbulence (comme le COVID-19).
-Ces deux extensions peuvent également être combinées et sont implémentées dans le package R `publishTC`. 
+Ces deux extensions peuvent également être combinées et sont implémentées dans le *package* R `publishTC`. 
 Ce dernier permet également de reproduire le lissage avec les méthodes utilisées par ABS et Statistique Canada, ainsi que de produire des visualisations.
 Sa facilité d'utilisation permet de mettre en place une chaîne de production de la composante tendance-cycle : le modèle simplifié proposé dans cette article pour des publications de l'Insee permet de facilement ajouter de nouvelles publications et de nouvelles séries.
 Il a été appliqué sur dix publications (environ 80 séries, <https://aqlt.github.io/publishTC.wp/>) permettant d'étudier l'intérêt de la composante tendance-cycle sur différents cas d'usage, de comparer plusieurs méthodes d'estimation et de faire des analyses de révisions.
