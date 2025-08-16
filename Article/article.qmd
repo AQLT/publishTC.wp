@@ -159,7 +159,7 @@ C'est également la composante à privilégier pour effectuer des prévisions à
 Pourtant, seuls quelques instituts statistiques, comme Statistique Canada ou l'Australian Bureau of Statistics (ABS), diffusent régulièrement cette composante.
 
 Cette étude explique l'intérêt de publier la composante tendance-cycle et les recommandations pour le faire. 
-Elle présente également les méthodes, basées sur des moyennes mobiles, utilisées par Statistique Canada et l'Australian Bureau of Statistics 
+Elle présente également les méthodes, basées sur des moyennes mobiles, utilisées par Statistique Canada et l'Australian Bureau of Statistics. 
 Elle montre comment ces méthodes peuvent être étendues pour : 
 
 1)	Réduire le biais des estimations intermédiaires, notamment autour de points de retournement ; 
