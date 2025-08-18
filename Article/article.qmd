@@ -304,7 +304,7 @@ $$
 \text{ avec }n=h+2.
 $$
 
-Comme montré par @proietti2008, celle-ci peut-être obtenue en modélisant localement une tendance de degré 2 ($d=2$) et en utilisant les noyaux :
+Comme montré par @proietti2008, celle-ci peut être obtenue en modélisant localement une tendance de degré 2 ($d=2$) et en utilisant les noyaux :
 $$
 \kappa_{j}=\left[1-\frac{j^2}{(h+1)^2}\right]
 \left[1-\frac{j^2}{(h+2)^2}\right]
@@ -625,7 +625,7 @@ Il faut en particulier être prudent sur l'analyse des points de retournement su
 La façon la plus simple de mettre en oeuvre cette recommandation est de mettre les dernières estimations de la tendance-cycle en pointillé. 
 ABS ne met pas en oeuvre cette recommandation mais Statistique Canada ajoute l'avertissement « La plus grande variabilité associée aux estimations de la tendance-cycle est indiquée au moyen d'une ligne pointillée dans le graphique pour le mois de référence en cours et pour les trois mois précédents ».
 
-Dans `publishTC`, la tendance-cycle peut-être représentée conjointement avec la série désaisonnalisée en utilisant les fonctions `plot()` et `ggplot2::autoplot()`.
+Dans `publishTC`, la tendance-cycle peut être représentée conjointement avec la série désaisonnalisée en utilisant les fonctions `plot()` et `ggplot2::autoplot()`.
 Par défaut, les quatre dernières estimations de la tendance-cycle sont en pointillés (comme dans les publications de Statistique Canada).
 Ces pointillés peuvent être supprimés en utilisant le paramètre `n_last_tc = 0`.
 En reprenant notre exemple :
