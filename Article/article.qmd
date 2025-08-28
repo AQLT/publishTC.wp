@@ -974,7 +974,7 @@ Cet article présente également deux extension possibles aux moyennes mobiles d
 Ces deux extensions peuvent également être combinées et sont implémentées dans le *package* R `publishTC`. 
 Ce dernier permet également de reproduire le lissage avec les méthodes utilisées par ABS et Statistique Canada, ainsi que de produire des visualisations.
 Sa facilité d'utilisation permet de mettre en place une chaîne de production de la composante tendance-cycle : le modèle simplifié proposé dans cette article pour des publications de l'Insee permet de facilement ajouter de nouvelles publications et de nouvelles séries.
-Il a été appliqué sur dix publications (environ 80 séries, <https://aqlt.github.io/publishTC.wp/>) permettant d'étudier l'intérêt de la composante tendance-cycle sur différents cas d'usage, de comparer plusieurs méthodes d'estimation et de faire des analyses de révisions.
+Il a été appliqué sur dix publications de l'Insee (environ 80 séries, <https://aqlt.github.io/publishTC.wp/>) permettant d'étudier l'intérêt de la composante tendance-cycle sur différents cas d'usage, de comparer plusieurs méthodes d'estimation et de faire des analyses de révisions.
 Pour une mise en production officielle de la tendance-cycle il est toutefois recommandé d'analyser précisément les résultats en utilisant l'expertise économique que le producteur a sur les séries, permettant notamment de choisir la méthode représentant au mieux la réalité économique de la série et ses points de retournement.
 
 
