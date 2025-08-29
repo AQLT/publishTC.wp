@@ -102,7 +102,7 @@ Cet article décrit l'intérêt de publier cette composante tendance-cycle, les 
 Cet article détaille également des recommandations de présentation de cette composante et comment facilement mettre en production son estimation grâce à des rapports automatisés.
 Ces derniers sont appliqués à une dizaine de publications de l'Insee (environ 80 séries).
 
-Cette étude est accompagné d'un *package* R, `publishTC`, permettant de facilement mettre en oeuvre toutes les méthodes et recommandations.
+Cette étude est accompagné d'un *package* R, `publishTC`, permettant de facilement mettre en œuvre toutes les méthodes et recommandations.
 Elle est également entièrement reproductible et tous les codes utilisés sont disponibles sous <https://github.com/AQLT/publishTC.wp>.
 
 Mots clés : séries temporelles, tendance-cycle, désaisonnalisation, points de retournement.
@@ -622,8 +622,8 @@ Cela permet aux utilisateurs de clairement discerner l'ampleur et le signe de l'
 La principale critique des estimations de la tendance-cycle est l'ampleur des révisions : mêmes si celles-ci sont finalement moins importantes que celles de la séries CVS-CJO, elles sont concentrées sur les 3 premières estimations.
 De nombreux auteurs s'accordent donc à recommander que la présentation des estimations de la tendance-cycle doit mettre en lumière le moindre degré de fiabilité de la tendance-cycle sur les dernières observations [ @huot1989note ; @kenny1982local ; @imf_qna_2017].
 Il faut en particulier être prudent sur l'analyse des points de retournement sur les dernières périodes [lorsque l'estimation n'est pas définitive, @abs_smoothing_1987 ; @abs_time_series_guidelines ; @mclaren_zhang_2010].
-La façon la plus simple de mettre en oeuvre cette recommandation est de mettre les dernières estimations de la tendance-cycle en pointillé. 
-ABS ne met pas en oeuvre cette recommandation mais Statistique Canada ajoute l'avertissement « La plus grande variabilité associée aux estimations de la tendance-cycle est indiquée au moyen d'une ligne pointillée dans le graphique pour le mois de référence en cours et pour les trois mois précédents ».
+La façon la plus simple de mettre en œuvre cette recommandation est de mettre les dernières estimations de la tendance-cycle en pointillé. 
+ABS ne met pas en œuvre cette recommandation mais Statistique Canada ajoute l'avertissement « La plus grande variabilité associée aux estimations de la tendance-cycle est indiquée au moyen d'une ligne pointillée dans le graphique pour le mois de référence en cours et pour les trois mois précédents ».
 
 Dans `publishTC`, la tendance-cycle peut être représentée conjointement avec la série désaisonnalisée en utilisant les fonctions `plot()` et `ggplot2::autoplot()`.
 Par défaut, les quatre dernières estimations de la tendance-cycle sont en pointillés (comme dans les publications de Statistique Canada).
@@ -963,7 +963,7 @@ En somme, afin d'éclairer le débat public et réduire le risque que les utilis
 En effet, en n'enlevant que la composante saisonnière et les jours ouvrables, la désaisonnalisation laisse dès lors l'influence de la tendance-cycle et de l'irrégulier.
 Lorsque l'irrégulier est important (i.e., lorsque la série est bruitée), lisser les séries pour analyser directement la tendance de court terme (i.e., la composante tendance-cycle) apporte une information supplémentaire pour le diagnostic conjoncturel en améliorant la compréhension et la détection des points de retournement et en réduisant l'impact des évènements ponctuels, ce qui peut contribuer à une prise de décision opportune et éclairée. 
 La publication de la tendance-cycle n'a pas vocation à remplacer celle des séries désaisonnalisées, ni celle des séries brutes.
-Ces trois séries doivent être utilisées de manière complémentaire : chaque composante a ses forces et ses faiblesses et répond à des besoins différents et leur publication conjointe aide à prendre des décisions impartiales et éclairée.
+Ces trois séries doivent être utilisées de manière complémentaire : chaque composante a ses forces et ses faiblesses et répond à des besoins différents et leur publication conjointe aide à prendre des décisions impartiales et éclairées.
 
 Les seuls instituts publiant régulièrement la composante tendance-cycle, Australian Bureau of Statistics (ABS) et Statistique Canada, utilisent des moyennes mobiles.
 Pour l'estimation finale, une moyenne mobile symétrique est utilisée (en utilisant autant de point dans le passé que dans le futur) : les estimations intermédiaires doivent donc être basées sur des moyennes mobiles asymétriques, ce qui conduira à des révisions au fur et à mesure que de nouvelles observations sont disponibles.
