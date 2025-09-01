@@ -115,10 +115,10 @@ for (f in files){
              revision_history = list(
                  enabled = TRUE,
                  name = "Analyse des révisions",
+                 nobs = 7,
                  table = list(
                      enabled = TRUE,
-                     contribution_of_sa = TRUE,
-                     nobs = 7,
+                     contribution_of_sa = TRUE
                  )
              ),
              extra_info = list(

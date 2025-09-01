@@ -31,6 +31,7 @@ fs <- list()
 for (f in qmd_files){
     print(f)
     fs[[f]] <- future({
+        print(paste("File:", f))
         quarto::quarto_render(f,quiet = TRUE)
     })
 }
