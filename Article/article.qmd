@@ -922,10 +922,10 @@ plots:
   revision_history: # <7>
     enabled: yes
     name: Analyse des révisions
-    table: # <8>
+    nobs: 7 # <8>
+    table: # <9>
       enabled: yes
       contribution_of_sa: yes
-      nobs: 7 # <9>
   extra_info: # <10>
     enabled: yes
     name: Statistiques générales
@@ -937,9 +937,9 @@ plots:
 5. Quels sont les graphiques à tracer : usuel (`normal`), intervalles de confiance (`confint`), en bâtonnet (`lollypop`) et prévisions implicites `implicit_forecasts`.
 6. Faut-il ajouter des graphiques comparant l'ensemble des méthodes d'estimation ? Si `interactive: yes` un graphique interactif est ajouté avec les estimations sur l'ensemble de la période.
 7. Faut-il faire des graphiques analysant les différentes révisions ?
-8. Faut-il ajouter un tableau avec l'ensemble des révisions (`enabled: yes`) ?
+8. Nombre maximal d'observations à afficher dans les graphiques et tableau xdes révisions.
+9. Faut-il ajouter un tableau avec l'ensemble des révisions (`enabled: yes`) ?
 Par ailleurs, si `contribution_of_sa: yes` un second tableau est ajouté en calculant la part des révisions de la tendance-cycle liées aux révisions de la série CVS-CJO.
-9. Nombre maximal d'observations à afficher dans le tableau des révisions.
 10. Faut-il ajouter des informations générales ? Il s'agit pour chaque méthode les valeurs de l'I/C ratio, MCD, la longueur de la moyenne mobile symétrique et également des points atypiques modélisés pour le lissage par moyennes mobiles robustes.
 
 Afin d'isoler les révisions liées à l'ajout d'une nouvelle date de celle associée à la mise à jour des données passées, il est possible de calculer la part des révisions liées à la mise à jour des séries CVS-CJO.
