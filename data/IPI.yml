@@ -102,10 +102,10 @@ plots:
   revision_history:
     enabled: yes
     name: Analyse des révisions
+    nobs: 7.0
     table:
       enabled: yes
       contribution_of_sa: yes
-      nobs: 7.0
   extra_info:
     enabled: yes
     name: Statistiques générales
