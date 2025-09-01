@@ -151,6 +151,8 @@ rev_data <- lapply(basename(list_files), function(f){
       res)
 })
 names(rev_data) <- names(all_data)
+if (!is.null (spec$plots$revision_history$table$nobs)) 
+    rev_data <- tail(rev_data, spec$plots$revision_history$table$nobs)
 rev_data <- rev(rev_data)
 rev_data_ <- lapply(names(rev_data[[1]][[1]]), function(serie){
     res <- lapply(names(rev_data[[1]]), function(method){
