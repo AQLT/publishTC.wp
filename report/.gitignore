@@ -2,3 +2,13 @@ template.html
 *_cache
 *_files
 *.html
+CONJ_COMD.qmd
+CONJ_FRANCE.qmd
+CONJ_INDUSTRIE.qmd
+CONJ_SERV.qmd
+CONSO.qmd
+CREATION_ENT.qmd
+ICA_ind.qmd
+ICAM.qmd
+IPI.qmd
+IVV.qmd
