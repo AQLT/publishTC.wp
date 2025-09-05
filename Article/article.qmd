@@ -28,16 +28,19 @@ format:
     classoption: french
     cite-method: biblatex
     pdf-engine: pdflatex
+    fontsize: 12pt
     papersize: A4
     fig-width: 7.5
     fig-height: 3.5
     toc: false # to include abstract first
     fig-pos: 'H'
     geometry:
-      - top=2cm
-      - bottom=2.5cm
-      - left = 2.5cm
-      - right = 2.5cm
+      - hmargin = 25mm
+      - vmargin = 25mm
+      # - top=2cm
+      # - bottom=2.5cm
+      # - left = 2.5cm
+      # - right = 2.5cm
   # docx:
   #   number-sections: true
   #   fig-width: 6.3 # 16cm
@@ -61,7 +64,7 @@ fig-cap-location: top
 bibliography: biblio.bib
 csl: template/chicago-author-date.csl
 author:
-  - name: Alain Quartier-la-Tente 
+  - name: Alain QUARTIER-LA-TENTE 
     affiliation: LEMNA
     orcid: 0000-0001-7890-3857
 comments: 
@@ -69,7 +72,7 @@ comments:
       theme: clean
 ---
 
-\renewcommand{\thepage}{\roman{page}}
+<!-- \renewcommand{\thepage}{\roman{page}} -->
 
 
 ```{r}
@@ -105,7 +108,9 @@ Ces derniers sont appliqués à une dizaine de publications de l'Insee (environ 
 Cette étude est accompagné d'un *package* R, `publishTC`, permettant de facilement mettre en œuvre toutes les méthodes et recommandations.
 Elle est également entièrement reproductible et tous les codes utilisés sont disponibles sous <https://github.com/AQLT/publishTC.wp>.
 
+::: {.content-visible when-format="html"}
 Mots clés : séries temporelles, tendance-cycle, désaisonnalisation, points de retournement.
+:::
 ::::
 
 
@@ -121,7 +126,9 @@ These, by applying it to a dozen INSEE publications (around 80 series).
 This study is accompanied by an R package, `publishTC`, making it easy to implement all the methods and recommendations.
 It is fully reproducible and all the codes used are available under <https://github.com/AQLT/publishTC.wp>.
 
+::: {.content-visible when-format="html"}
 Keywords: time series, trend-cycle, seasonal adjustment, turning points.
+:::
 ::::
 
 JEL Classification: C22, E32.
@@ -135,7 +142,7 @@ JEL Classification: C22, E32.
 \tableofcontents
 }
 \newpage
-\pagenumbering{arabic}
+%\pagenumbering{arabic}
 ```
 
 
@@ -388,7 +395,7 @@ colnames(data) <- c(
 data |>
     autoplot() +
     labs(x = NULL, y = NULL) +
-    theme_bw() +
+    theme_classic() +
     theme(
         legend.title = element_blank(),
         legend.position = "inside",
@@ -397,7 +404,9 @@ data |>
         legend.background = element_rect(
             fill = alpha("gray99", 0.4))
     ) +
-    ggplot2::scale_color_manual(values = palette_coef)
+    ggplot2::scale_color_manual(values = palette_coef) +
+    ggplot2::scale_x_continuous(breaks = NULL) +
+    ggplot2::scale_y_continuous(breaks = NULL)
 ```
 
 ## Cascade Linear Filters (CLF)

@@ -13,6 +13,54 @@
 \newcommand{\V}[1]{\mathbb{V}\left[#1\right]}
 \newcommand{\cov}[2]{\Cov\left(#1,#2\right)}
 
+\usepackage{titling}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+
+
+
+% Configuration des en-têtes et pieds de page
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead{}
+\renewcommand{\footrulewidth}{0pt}
+\fancyfoot[C]{\footnotesize{$15^{e}$ édition des journées de méthodologie statistique de l'Insee (JMS 2025)}}
+\fancyfoot[R]{\thepage}
+\setlength\parindent{0pt}
+
+\renewcommand{\maketitle}{%
+\begin{center}
+    \includegraphics[width=15cm]{template/head_jms2025.png}
+
+%    \hrulefill
+    \vspace{5mm}
+
+    {\bfseries\Large \textsc{\thetitle}}
+\end{center}
+
+\begin{center}
+\textit{\theauthor (*)} \\
+\vspace{2mm}
+\textit{(*) DGFiP et Laboratoire d'Économie et de Management Nantes-Atlantique (LEMNA)}\\
+\vspace{2mm}
+\url{alain.quartier-la-tente@dgfip.finances.gouv.fr}
+\end{center}
+%
+\vspace{5mm}
+\small{{\textbf{Mots-clés}} : Séries temporelles, tendance-cycle, désaisonnalisation, conjoncture, points de retournement.}
+
+\vspace{5mm}
+\small{\textbf{Domaine concerné} : Séries temporelles — désaisonnalisation.}
+
+\begin{center}
+    \hrulefill
+\end{center}
+
+\normalsize
+}
+\usepackage{mathpazo} % Pour que le titre s'affiche bien, il faut remplacer le package lmodern par une autre police
+%\usepackage{tgtermes}
 
 \usepackage{mathrsfs, dsfont}
 \usepackage[style=authoryear,uniquename=false, uniquelist=false]{biblatex}
