@@ -679,7 +679,7 @@ ggconfint_plot(tc_h, xlim = c(2022, NA))
 
 L'inconvénient de cette représentation est qu'elle peut laisser croire qu'il n'y a pas d'incertitude autour des estimations de la série brute ou désaisonnalisée.
 
-### Construction des prévisions {#sec-implicit-forecast}
+### Construction des prévisions implicites {#sec-implicit-forecast}
 
 Afin de juger de la qualité des estimations en temps réel de la tendance-cycle et d'anticiper les futures révisions, il est possible de calculer les prévisions implicites associées à l'utilisation d'une moyenne mobile asymétrique [@jos2024AQLT].
 
