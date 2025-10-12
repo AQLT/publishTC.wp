@@ -847,7 +847,7 @@ series:
 6. Dates associées aux points atypiques additifs dont l'effet est associé à la tendance-cycle [cas particulier non décrit dans cet article, voir @AQLT2025robustMA].
 7. Dates associées aux ruptures en niveau (LS) dont l'effet est associé à la tendance-cycle
 8. Première date à partir de laquelle la tendance-cycle est estimée.
-9. Longueur de la moyenne mobile symétrique. Si `null` alors une sélection automatique sera effectuée comme décrite à la @sec-hend-musgrave.
+9. Longueur de la moyenne mobile symétrique. Si `null` alors une sélection automatique sera effectuée comme décrit à la @sec-hend-musgrave.
 10. Bloc associé à la deuxième série contenant les mêmes paramètres.
 
 
