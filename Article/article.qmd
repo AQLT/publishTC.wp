@@ -962,7 +962,7 @@ La révision totale peut donc s'écrire :
 \begin{align*}
 &\underbrace{\widehat TC_{t} (y_{t|2025.05}) - \widehat TC_{t} (y_{t|2025.04})}_{\text{Révision totale à la dernière publication}} = \\
 &\quad
-\underbrace{\widehat TC_{t} (y_{t|2025.05}) - \widehat TC_{t} (y_{t|2025.05}^{2025.04})}_{\text{Révision liées à la l'ajout d'un nouveau point}} +
+\underbrace{\widehat TC_{t} (y_{t|2025.05}) - \widehat TC_{t} (y_{t|2025.05}^{2025.04})}_{\text{Révision liées à l'ajout d'un nouveau point}} +
 \underbrace{\widehat TC_{t} (y_{t|2025.05}^{2025.04}) - \widehat TC_{t} (y_{t|2025.04})}_{\text{Révision liées à la mise à jour de la CVS-CJO}}. 
 \end{align*}
 
