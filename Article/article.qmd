@@ -34,6 +34,7 @@ format:
     fig-height: 3.5
     toc: false # to include abstract first
     fig-pos: 'H'
+    output-file: "S14_ACTE_quartierlatente_JMS2025"
     geometry:
       - hmargin = 25mm
       - vmargin = 25mm
