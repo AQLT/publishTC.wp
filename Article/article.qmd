@@ -713,7 +713,7 @@ tc_clf <- clf_smoothing(french_ipi[,"manufacturing"])
 
 ```
 
-## Graphique *lollipop* (en bâtonnet)
+## Graphique *lollypop* (en bâtonnet)
 
 Afin de mettre de mettre l'accent sur la tendance-cycle et le niveau de l'irrégulier présent dans la série CVS-CJO, @mclaren_zhang_2010 suggèrent de réaliser des graphiques en bâtonnet, également appelés *lollypop*. 
 Ils permettent également de mettre en évidence les points de retournement : trois valeurs irrégulières du même côté de la tendance (i.e., du même signe) peut suggérer le début d'un point d'inflexion et d'un changement de la direction sous-jacente.
