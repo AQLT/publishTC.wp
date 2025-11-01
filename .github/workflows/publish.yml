@@ -85,10 +85,10 @@ jobs:
         [ -f template.html ] && rm template.html
         # Copie de l'article
         cp Article/article.html .
-        cp Article/article.pdf .
+        cp Article/S14_ACTE_quartierlatente_JMS2025.pdf .
         cp -r Article/article_files .
         git add *.html
-        git add article.pdf
+        git add S14_ACTE_quartierlatente_JMS2025.pdf
         git add article_files
         git commit -m "Update reports"
         git fetch origin
