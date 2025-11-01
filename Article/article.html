@@ -159,7 +159,7 @@ window.Quarto = {
   <li><a href="#sec-confint" id="toc-sec-confint" class="nav-link" data-scroll-target="#sec-confint"><span class="header-section-number">4.1.1</span> Construction des intervalles de confiance</a></li>
   <li><a href="#sec-implicit-forecast" id="toc-sec-implicit-forecast" class="nav-link" data-scroll-target="#sec-implicit-forecast"><span class="header-section-number">4.1.2</span> Construction des prévisions implicites</a></li>
   </ul></li>
-  <li><a href="#graphique-lollipop-en-bâtonnet" id="toc-graphique-lollipop-en-bâtonnet" class="nav-link" data-scroll-target="#graphique-lollipop-en-bâtonnet"><span class="header-section-number">4.2</span> Graphique <em>lollipop</em> (en bâtonnet)</a></li>
+  <li><a href="#graphique-lollypop-en-bâtonnet" id="toc-graphique-lollypop-en-bâtonnet" class="nav-link" data-scroll-target="#graphique-lollypop-en-bâtonnet"><span class="header-section-number">4.2</span> Graphique <em>lollypop</em> (en bâtonnet)</a></li>
   <li><a href="#représentation-des-taux-de-croissance" id="toc-représentation-des-taux-de-croissance" class="nav-link" data-scroll-target="#représentation-des-taux-de-croissance"><span class="header-section-number">4.3</span> Représentation des taux de croissance</a></li>
   </ul></li>
   <li><a href="#comment-mettre-en-place-une-chaine-de-production-automatique" id="toc-comment-mettre-en-place-une-chaine-de-production-automatique" class="nav-link" data-scroll-target="#comment-mettre-en-place-une-chaine-de-production-automatique"><span class="header-section-number">5</span> Comment mettre en place une chaine de production automatique&nbsp;?</a>
@@ -851,8 +851,8 @@ R_k=\frac{\bar{I_k}}{\bar{C_k}}=\frac{\sum\lvert I_t-I_{t-k}\rvert}{\sum\lvert T
 </div>
 </section>
 </section>
-<section id="graphique-lollipop-en-bâtonnet" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="graphique-lollipop-en-bâtonnet"><span class="header-section-number">4.2</span> Graphique <em>lollipop</em> (en bâtonnet)</h2>
+<section id="graphique-lollypop-en-bâtonnet" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="graphique-lollypop-en-bâtonnet"><span class="header-section-number">4.2</span> Graphique <em>lollypop</em> (en bâtonnet)</h2>
 <p>Afin de mettre de mettre l’accent sur la tendance-cycle et le niveau de l’irrégulier présent dans la série CVS-CJO, <span class="citation" data-cites="mclaren_zhang_2010">McLaren et Zhang (<a href="#ref-mclaren_zhang_2010" role="doc-biblioref">2010</a>)</span> suggèrent de réaliser des graphiques en bâtonnet, également appelés <em>lollypop</em>. Ils permettent également de mettre en évidence les points de retournement&nbsp;: trois valeurs irrégulières du même côté de la tendance (i.e., du même signe) peut suggérer le début d’un point d’inflexion et d’un changement de la direction sous-jacente. Ce graphique est réalisable à partir des fonctions <code>publishTC::lollypop()</code> et <code>publishTC::gglollypop()</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gglollypop</span>(tc_h, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">2022</span>, <span class="cn">NA</span>))</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1141,7 +1141,7 @@ R_k=\frac{\bar{I_k}}{\bar{C_k}}=\frac{\sum\lvert I_t-I_{t-k}\rvert}{\sum\lvert T
 <p>Afin d’isoler les révisions liées à l’ajout d’une nouvelle date de celle associée à la mise à jour des données passées, il est possible de calculer la part des révisions liées à la mise à jour des séries CVS-CJO. Étudions par exemple les révisions par rapport à la publication de mai 2025. Notons <span class="math inline">\(y_{t|t'}\)</span> la série CVS-CJO à la date <span class="math inline">\(t\)</span> publiée à la date <span class="math inline">\(t'\)</span> et <span class="math inline">\(\widehat TC_{t}(y_{\cdot|t'})\)</span> l’estimation de la tendance-cycle associée à ces données. <span class="math inline">\(y_{t|2025.05}\)</span> correspond donc à la série CVS-CJO publiée en mai 2025 et <span class="math inline">\(y_{t|2025.04}\)</span> à la série publiée en avril 2025. Par rapport au mois de mai 2025, la révision totale de la tendance-cycle correspond donc, pour chaque date <span class="math inline">\(t,\)</span> à <span class="math inline">\(\widehat TC_{t} (y_{t|2025.05}) - \widehat TC_{t} (y_{t|2025.04}).\)</span> Notons maintenant <span class="math inline">\(y_{t|2025.05}^{2025.04}\)</span> la série CVS-CJO publiée en mai 2025 dont on a tronqué les valeurs jusqu’en avril 2025 (i.e., en supprimant la dernière donnée). La révision totale peut donc s’écrire&nbsp;: <span class="math display">\[\begin{align*}
 &amp;\underbrace{\widehat TC_{t} (y_{t|2025.05}) - \widehat TC_{t} (y_{t|2025.04})}_{\text{Révision totale à la dernière publication}} = \\
 &amp;\quad
-\underbrace{\widehat TC_{t} (y_{t|2025.05}) - \widehat TC_{t} (y_{t|2025.05}^{2025.04})}_{\text{Révision liées à la l'ajout d'un nouveau point}} +
+\underbrace{\widehat TC_{t} (y_{t|2025.05}) - \widehat TC_{t} (y_{t|2025.05}^{2025.04})}_{\text{Révision liées à l'ajout d'un nouveau point}} +
 \underbrace{\widehat TC_{t} (y_{t|2025.05}^{2025.04}) - \widehat TC_{t} (y_{t|2025.04})}_{\text{Révision liées à la mise à jour de la CVS-CJO}}.
 \end{align*}\]</span></p>
 </section>
